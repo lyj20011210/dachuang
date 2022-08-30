@@ -1,13 +1,12 @@
 from flask import Blueprint,render_template
 
-bp=Blueprint("user",__name__,url_prefix="/user")
-
-
+#url_prefix:作为前缀 127.0.0.1:5000/user
+bp = Blueprint("user",__name__,url_prefix="/user")
 
 @bp.route("/login")
-def login():
+def user_login():
     return render_template("Login.html")
 
 @bp.route("/register")
-def register():
+def user_register():
     return render_template("register.html")
