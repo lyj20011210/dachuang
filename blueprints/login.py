@@ -1,4 +1,5 @@
 from flask import Blueprint,render_template
+
 from exts import mail
 from flask_mail import Message
 #url_prefix:作为前缀 127.0.0.1:5000/user
@@ -17,3 +18,6 @@ def my_mail():
     )
     mail.send(message)
     return "success"
+@bp.route("/person")
+def person():
+    return render_template("person.html")
