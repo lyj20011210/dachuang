@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}详情页
+{% endblock %}
+
+{% block head %}
+{% endblock %}
+<h>视频详情介绍</h>
+{% block body %}
+{#视频栏#}
+    <span id="video_bak">
+        <div>
+            <video ishivideo="true" autoplay="true" isrotate="true" autoHide="true" controls="controls">
+                <source src="/static/image/000.mp4" type="video/mp4">
+             </video>
+        </div>
+
+    </span>
+{% endblock %}

@@ -1,0 +1,42 @@
+#video_list {
+	background: #f8f8f8;
+}
+#video_list img{
+    width: 380px;
+    height: 220px;
+}
+.video_main_box{
+    width:1200px;
+    position:relative;
+    margin:0 auto;
+}
+.video_box{
+    width:400px;
+    height: 300px;
+    position:relative;
+    padding: 10px;
+    float: left;
+}
+.video_title{
+    font-weight: bold;
+    font-family: "微软雅黑";
+    font-size: 20px;
+}
+.video_up{
+    font-family:"微软雅黑";
+    font-size: 12px;
+    color: #8a8a8a;
+    float: left;
+}
+.video_counts{
+    font-family: "微软雅黑";
+    font-size: 1px;
+    color: #8a8a8a;
+    float: right;
+}
+.video_page{
+    width:1200px;
+    position:relative;
+    margin:0 auto;
+    text-align: center;
+}

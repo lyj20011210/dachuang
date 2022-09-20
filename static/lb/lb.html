@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <title>轮播视频</title>
+    <link rel="stylesheet" type="text/css" href="lb.css">
+</head>
+<body>
+<div class="main_lb">
+    <div class="main_lb_background">
+        <div class="main_lb_box" id="m_box">
+            <a href="javascript:void(0)" class="banner_btn js_pre">
+                <span class="banner_btn_arrow"><i></i></span>
+            </a>
+            <a href="javascript:void(0)" class="banner_btn btn_next js_next">
+                <span class="banner_btn_arrow"><i></i></span>
+            </a>
+
+            <ul>
+                <li id="imgCard0">
+                    <a href=""><span style="opacity:0;"></span></a>
+                    <img src="image/0.jpg" alt="">
+                    <p style="bottom:0">【一起啃书】Python编程从入门到实践</p>
+                </li>
+                <li id="imgCard1">
+                    <a href=""><span style="opacity:0.4;"></span></a>
+                    <img src="image/1.jpg" alt="">
+                    <p>【千锋】零基础玩转Python_Flask（flask快速上手）</p>
+                </li>
+                <li id="imgCard2">
+                    <a href=""><span style="opacity:0.4;"></span></a>
+                    <img src="image/2.jpg" alt="">
+                    <p>【STL基础教程】</p>
+                </li>
+                <li id="imgCard3">
+                    <a href=""><span style="opacity:0.4;"></span></a>
+                    <img src="image/3.jpg" alt="">
+                    <p>零基础深度学习经典算法</p>
+                </li>
+                <li id="imgCard4">
+                    <a href=""><span style="opacity:0.4;"></span></a>
+                    <img src="image/4.jpg" alt="">
+                    <p>【高数入门】菜鸟学高数</p>
+                </li>
+            </ul>
+            <!--倒影图层-->
+            <p id="rflt"></p>
+            </div>
+            <!--序列号按钮-->
+            <div class="btn_list">
+                <span class="curr"></span><span></span><span></span><span></span><span></span>
+            </div>
+    </div>
+</div>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="lb.js"></script>
+</body>
+</html>
