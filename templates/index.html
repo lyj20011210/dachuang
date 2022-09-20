@@ -14,12 +14,12 @@
             </iframe>
         </div>
     </section>
-            <a href="{{ url_for('video.index') }}">123</a>
+
     {# 视频列表 #}
     <section id="video_list" style="margin-top: 0px">
     <div class="video_main_box">
         <div class="video_box">
-
+            <a href="{{ url_for('video.detail') }}"  style="text-decoration: none">
             <img src="/static/image/1.png" alt="Python"/>
             <div>
                 <span class="video_title">神经网络与深度学习——TensorFlow实践</span>
@@ -33,6 +33,7 @@
                     <span>9865次播放</span>
                 </div>
             </div>
+            </a>
         </div>
 
          <div class="video_box">

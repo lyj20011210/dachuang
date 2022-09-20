@@ -7,13 +7,11 @@
 }
 .video_main_box{
     width:1200px;
-    position:relative;
     margin:0 auto;
 }
 .video_box{
     width:400px;
     height: 300px;
-    position:relative;
     padding: 10px;
     float: left;
 }
@@ -36,7 +34,6 @@
 }
 .video_page{
     width:1200px;
-    position:relative;
     margin:0 auto;
     text-align: center;
 }
