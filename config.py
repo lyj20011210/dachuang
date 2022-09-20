@@ -1,9 +1,9 @@
 # 数据库配置信息
-HOSTNAME = '127.0.0.1'
-PORT = '3307'
-DATABASE = 'recommendation'
+HOSTNAME = 'gz-cynosdbmysql-grp-o9nzvt3p.sql.tencentcdb.com'
+PORT = '23303'
+DATABASE = 'Test'
 USERNAME = 'root'
-PASSWORD = '12345678'
+PASSWORD = '@L12345678'
 DB_URI = 'mysql+pymysql://{}:{}@{}:{}/{}'.format(USERNAME, PASSWORD, HOSTNAME,
                                                  PORT, DATABASE)
 SQLALCHEMY_DATABASE_URI = DB_URI
