@@ -1,23 +1,42 @@
-from flask import Blueprint,render_template
+from flask import Blueprint, render_template, request, redirect, flash, session, url_for
+from exts import db
+from .forms import LoginForm
+from Models import UserModel
 
-from exts import mail
-from flask_mail import Message
-#url_prefix:作为前缀 127.0.0.1:5000/user
-bp = Blueprint("login",__name__,url_prefix="/user")
+# url_prefix:作为前缀 127.0.0.1:5000/user
+bp = Blueprint("login", __name__, url_prefix="/user")
 
-@bp.route("/login")
+
+@bp.route("/login", methods=['GET', 'POST'])
 def login():
-    return render_template("Login.html")
-
-@bp.route("/mail")
-def my_mail():
-    message = Message(
-        subject="邮箱测试",
-        recipients=['1252967009@qq.com'],
-        body="这是一篇测试邮件"
-    )
-    mail.send(message)
-    return "success"
-@bp.route("/person")
-def person():
-    return render_template("person.html")
+    if request.method == 'GET':
+        return render_template("login.html")
+    else:
+        form = LoginForm(request.form)
+        user = form.user.data
+        password = request.form.get("password")
+        finduser = UserModel.query.filter_by(username=user).first()
+        if finduser:
+            checkuser = finduser.username
+            checkpwd = finduser.password
+            password=str(password)
+            if checkpwd == password:
+                session["name"] = checkuser
+                print(session["name"])
+                return redirect("/")
+            else:
+                print("密码错误")
+                return redirect(url_for("login.login"))
+        else:
+            print("用户不存在")
+            return redirect(url_for("login.login"))
+        # if checkuser == user:
+        #     findpassword= UserModel.query.filter_by(password=password).first()
+        #     passwordcheck=findpassword.password
+        #     print(passwordcheck)
+        #     if passwordcheck== password:
+        #         session["name"] = checkuser
+        #         return redirect("/")
+        # else:
+        #     flash("用户名不存在")
+        #     return redirect(url_for("login.login"))
