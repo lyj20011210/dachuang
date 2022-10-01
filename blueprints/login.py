@@ -25,10 +25,10 @@ def login():
                 print(session["name"])
                 return redirect("/")
             else:
-                print("密码错误")
+                flash("密码错误")
                 return redirect(url_for("login.login"))
         else:
-            print("用户不存在")
+            flash("用户不存在")
             return redirect(url_for("login.login"))
         # if checkuser == user:
         #     findpassword= UserModel.query.filter_by(password=password).first()
