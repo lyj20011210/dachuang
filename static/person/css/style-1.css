@@ -179,7 +179,7 @@ main {
     align-items: center;
     text-align: center;
 }
-.hidden {
+.user_hidden {
     display: none;
 }
 .content img {
