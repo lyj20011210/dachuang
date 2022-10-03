@@ -37,3 +37,46 @@
     margin:0 auto;
     text-align: center;
 }
+
+.video_detail_left {
+    position: relative;
+    width: 1200px;
+    height:  750px;
+    float: left;
+}
+.video_detail_left iframe {
+    position: absolute;
+    width: 1200px;
+    height: 750px;
+    left: 0;
+    top: 0;
+}
+.video_detail_right{
+    position: relative;
+    width: 450px;
+    height:  750px;
+    float: right;
+    margin-right: 20px;
+}
+.video_introduce{
+    text-align: center;
+}
+.video_introduce_title{
+    font-family: "Microsoft YaHei";
+    font-weight: bold;
+    font-size: 20px;
+}
+.video_detail_right table{
+    border-radius: 5px;
+    box-shadow: 2px 2px 5px #1a1e24;
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 20px;
+
+}
+.td1{
+    color:#ccc;
+    font-weight:bold;
+    font-style:italic;
+}
