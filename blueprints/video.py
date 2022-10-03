@@ -1,4 +1,4 @@
-from flask import Blueprint,render_template
+from flask import Blueprint, render_template, session
 
 bp=Blueprint("video",__name__,url_prefix="/")
 
@@ -6,7 +6,9 @@ bp=Blueprint("video",__name__,url_prefix="/")
 
 @bp.route("/")
 def index():
-    return render_template("index.html")
+    user=session.get("name")
+    print(user)
+    return render_template("index.html",user=user)
 
 @bp.route("/detail")
 def detail():
