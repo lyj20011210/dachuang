@@ -6,6 +6,10 @@ from Models import UserModel
 # url_prefix:作为前缀 127.0.0.1:5000/user
 bp = Blueprint("login", __name__, url_prefix="/user")
 
+@bp.route("/logout")
+def logout():
+    session.clear()
+    return redirect(url_for('video.index'))
 
 @bp.route("/login", methods=['GET', 'POST'])
 def login():

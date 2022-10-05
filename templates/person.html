@@ -3,117 +3,138 @@
 {% endblock %}
 
 {% block head %}
-    <meta charset="UTF-8" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>欢迎来到 Weirry 主页</title>
-        <link rel="shortcut icon" href="favicon.ico" />
-        <!-- ------------------------------------------------- -->
-        <link rel="stylesheet" href="../static/person/css/base.css" />
-        <link rel="stylesheet" href="../static/person/css/fullpage.min.css" />
-        <!-- 引入外部字体连接 -->
-        <link rel="stylesheet" href="//at.alicdn.com/t/font_2935587_97eo1d0furr.css" />
-        <!-- 引入animate -->
-        <link rel="stylesheet" href="../static/person/css/animate.min.css" />
-        <link rel="stylesheet" href="../static/person/css/style-1.css" />
-        <link rel="stylesheet" href="../static/person/css/style-2.css" />
-        <link rel="stylesheet" href="../static/person/css/style-3.css" />
-        <link rel="stylesheet" href="../static/person/css/style-4.css" />
-        <link rel="stylesheet" href="../static/person/css/style-5.css" />
-        <link rel="stylesheet" href="../static/person/css/jaliswall.css" />
-        <!-- ------------------------------------------------- -->
-        <script src="../static/person/js/jQuery.mini.js"></script>
-        <script src="../static/person/js/fullpage.min.js"></script>
-        <script src="../static/person/js/jaliswall.js"></script>
-        <script src="../static/person/js/index.js"></script>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>欢迎来到 Weirry 主页</title>
+    <link rel="shortcut icon" href="favicon.ico"/>
+    <!-- ------------------------------------------------- -->
+    <link rel="stylesheet" href="../static/person/css/base.css"/>
+    <link rel="stylesheet" href="../static/person/css/fullpage.min.css"/>
+    <!-- 引入外部字体连接 -->
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_2935587_97eo1d0furr.css"/>
+    <!-- 引入animate -->
+    <link rel="stylesheet" href="../static/person/css/animate.min.css"/>
+    <link rel="stylesheet" href="../static/person/css/style-1.css"/>
+    <link rel="stylesheet" href="../static/person/css/style-2.css"/>
+    <link rel="stylesheet" href="../static/person/css/style-3.css"/>
+    <link rel="stylesheet" href="../static/person/css/style-4.css"/>
+    <link rel="stylesheet" href="../static/person/css/style-5.css"/>
+    <link rel="stylesheet" href="../static/person/css/jaliswall.css"/>
+    <!-- ------------------------------------------------- -->
+    <script src="../static/person/js/jQuery.mini.js"></script>
+    <script src="../static/person/js/fullpage.min.js"></script>
+    <script src="../static/person/js/jaliswall.js"></script>
+    <script src="../static/person/js/index.js"></script>
 {% endblock %}
 
 {% block body %}
-        <div id="dowebok">
-            <!-- <h3>第一屏</h3> -->
-            <div class="section sec1" id="section1">
-                <!-- 内容区域 -->
-                <main>
-                    <div class="main_left">
-                        <div class="myPhoto current">
-                            <a href="#">
-                                <img src="../static/person/img.jpg" alt="" />
-                                <h3>用户名</h3>
-                            </a>
-                        </div>
-                        <div>
-                            <a href="#">
-                                <p></p>
-                                <span>自我介绍</span>
-                            </a>
-                        </div>
-                        <div>
-                            <a href="#">
-                                <p></p>
-                                <span>收藏</span>
-                            </a>
-                        </div>
-                        <div>
-                            <a href="#">
-                                <p></p>
-                                <span>浏览记录</span>
-                            </a>
-                        </div>
-                        <div>
-                            <a href="#">
-                                <p></p>
-                                <span>学习规划</span>
-                            </a>
-                        </div>
+    <div id="dowebok">
+        <!-- <h3>第一屏</h3> -->
+        <div class="section sec1" id="section1">
+            <!-- 内容区域 -->
+            <main>
+                <div class="main_left">
+                    <div class="myPhoto current">
+                        <a href="#">
+                            <img src="../static/person/img.jpg" alt=""/>
+                            <h3>{{ name}}</h3>
+                        </a>
                     </div>
-                    <div class="main_right">
-                        <div class="content user_hidden" style="display: block">
-
-                        </div>
-
-                        <div class="content user_hidden">
-
-                            <div>
-                                <label class="" style="color: #0f0f0f">昵称</label>
-                                <input type="text" class="form-control" placeholder="你的昵称" aria-label="Recipient's username" aria-describedby="basic-addon2">
-                            </div>
-                            <div>
-                                <label class="" style="color: #0f0f0f">个性签名</label>
-                                <input type="text" class="form-control" placeholder="你的个性签名" aria-label="Recipient's username" aria-describedby="basic-addon2">
-                            </div>
-                            <div>
-                                <label class="" style="color: #0f0f0f">性别</label>
-                                <input type="checkbox" >
-                            </div>
-                        </div>
-
-                        <div class="content user_hidden">
-
-
-                        </div>
-
-                        <div class="content user_hidden">
-
-
-                        </div>
-
-                        <div class="content user_hidden">
-
-
-                        </div>
-
-                        <div class="content user_hidden">
-
-
-                        </div>
-
-                        <div class="content user_hidden">
-
-
-                        </div>
+                    <div>
+                        <a href="#">
+                            <p></p>
+                            <span>自我介绍</span>
+                        </a>
                     </div>
-                </main>
-            </div>
+                    <div>
+                        <a href="#">
+                            <p></p>
+                            <span>收藏</span>
+                        </a>
+                    </div>
+                    <div>
+                        <a href="#">
+                            <p></p>
+                            <span>浏览记录</span>
+                        </a>
+                    </div>
+                    <div>
+                        <a href="#">
+                            <p></p>
+                            <span>学习规划</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="main_right">
+                    <div class="content user_hidden" style="display: block">
+                        {% for i in showtap %}
+                            <label>
+                            {{ i }}
+                            </label>
+                        {% endfor %}
+                    </div>
+                    <div class="content user_hidden">
+                        <form action="{{ url_for('person.enter') }}" method="post">
+                        <div>
+                            {% for i in taplist %}
+                            <label>
+                                {{ i }}
+                            </label>
+                            <input name="tap" value={{ i }} type="checkbox" >
+                            {% endfor %}
+{#                            <label>#}
+{#                                计算机#}
+{#                            </label>#}
+{#                            <input name="tap" value="计算机" type="checkbox" checked="checked">#}
+{#                            <label>#}
+{#                                计算机网络#}
+{#                            </label>#}
+{#                            <input name="tap" value="计算机网络" type="checkbox" checked="checked">#}
+                            <button type="submit" class="btn btn-default" >提交</button>
+                        </div>
+                        </form>
+                        {#                            <div>#}
+                        {#                                <label class="" style="color: #0f0f0f">昵称</label>#}
+                        {#                                <input type="text" class="form-control" placeholder="你的昵称" aria-label="Recipient's username" aria-describedby="basic-addon2">#}
+                        {#                            </div>#}
+                        {#                            <div>#}
+                        {#                                <label class="" style="color: #0f0f0f">个性签名</label>#}
+                        {#                                <input type="text" class="form-control" placeholder="你的个性签名" aria-label="Recipient's username" aria-describedby="basic-addon2">#}
+                        {#                            </div>#}
+                        {#                            <div>#}
+                        {#                                <label class="" style="color: #0f0f0f">性别</label>#}
+                        {#                                <input type="checkbox" >#}
+                        {#                            </div>#}
+                    </div>
+
+                    <div class="content user_hidden">
+
+
+                    </div>
+
+                    <div class="content user_hidden">
+
+
+                    </div>
+
+                    <div class="content user_hidden">
+
+
+                    </div>
+
+                    <div class="content user_hidden">
+
+
+                    </div>
+
+                    <div class="content user_hidden">
+
+
+                    </div>
+                </div>
+            </main>
         </div>
+    </div>
 {% endblock %}
 
