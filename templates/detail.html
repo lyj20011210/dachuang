@@ -8,74 +8,55 @@
 <h>视频详情介绍</h>
 {% block body %}
 {#视频栏#}
-    <span id="video_detail">
+{% for video in video_list %}
+    <section id="">
         <div class="video_detail_left">
-            <iframe src="//player.bilibili.com/player.html?aid=941747210&bvid=BV1qW4y1a7fU&cid=800522935&page=1&as_wide=0&high_quality=1&danmaku=0"
+            <iframe src="{{ video["video_link"] }}"
                     scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"
                     sandbox="allow-top-navigation allow-same-origin allow-forms allow-scripts">
             </iframe>
         </div>
+
         <div class="video_detail_right">
             <div class="video_introduce">
-                <img src="/static/image/1.png" alt="UP主" style="width: 190px;height: 110px;border-radius: 20px;"/>
-                <p><span class="video_introduce_title">神经网络与深度学习——TensorFlow实践</span></p>
+                <img src="{{ video["video_image"] }}" alt="图片" style="width: 228px;height: 132px;border-radius: 20px;"/>
+                <p><span class="video_introduce_title">{{ video["video_name"] }}</span></p>
             </div>
-
-            <table class="table">
+            <table>
                 <tr>
-                    <td class="td1">
-                        <span class="glyphicon glyphicon-tag"></span>&nbsp;类型
-                    </td>
-                    <td>计算机/Python</td>
+                    <td class="td1">up主</td>
+                    <td>{{ video["video_author"] }}</td>
                 </tr>
                 <tr>
-                    <td class="td1">
-                        <span class="glyphicon glyphicon-time"></span>&nbsp;片长
-                    </td>
-                    <td>06:01</td>
+                    <td class="td1">类型</td>
+                    <td>{{ video["video_tag"] }}</td>
                 </tr>
                 <tr>
-                    <td class="td1">
-                        <span class="glyphicon glyphicon-star"></span>&nbsp;星级
-                    </td>
-                    <td>
-                        <div>
-                            <span class="glyphicon glyphicon-star" style="color:#FFD119"></span>
-                            <span class="glyphicon glyphicon-star" style="color:#FFD119"></span>
-                            <span class="glyphicon glyphicon-star" style="color:#FFD119"></span>
-                            <span class="glyphicon glyphicon-star-empty" style="color:#FFD119"></span>
-                            <span class="glyphicon glyphicon-star-empty" style="color:#FFD119"></span>
-                        </div>
-                    </td>
+                    <td class="td1">发布时间</td>
+                    <td>{{ video["video_publishedtime"] }}</td>
                 </tr>
                 <tr>
-                    <td class="td1">
-                        <span class="glyphicon glyphicon-calendar"></span>发布时间
-                    </td>
-                    <td>2020年7月12日</td>
+                    <td class="td1">播放量</td>
+                    <td>{{ video["video_view"] }}</td>
                 </tr>
                 <tr>
-                    <td class="td1">
-                        <span class="glyphicon glyphicon-play"></span>&nbsp;播放数量
-                    </td>
-                    <td>9865</td>
+                    <td class="td1">评论量</td>
+                    <td>{{ video["video_comment"] }}</td>
                 </tr>
                 <tr>
-                    <td class="td1">
-                        <span class="glyphicon glyphicon-comment"></span>&nbsp;评论数量
-                    </td>
-                    <td>325</td>
+                    <td class="td1">点赞量</td>
+                    <td>{{ video["video_like"] }}</td>
                 </tr>
                 <tr>
-                    <td class="td1">
-                        <span class="glyphicon glyphicon-picture"></span>&nbsp;视频介绍
-                    </td>
-                    <td>
-                        省略
-                    </td>
+                    <td class="td1">收藏量</td>
+                    <td>{{ video["video_collection"] }}</td>
+                </tr>
+                <tr>
+                    <td class="td1">视频介绍</td>
+                    <td>{{ video["video_introduce"] }}</td>
                 </tr>
             </table>
         </div>
-    </span>
-
+    </section>
+{% endfor %}
 {% endblock %}

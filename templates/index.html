@@ -4,6 +4,7 @@
 
 {% block head %}
         <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/video.css') }}">
+        <meta name="referrer" content="no-referrer">
 {% endblock %}
 
 {% block body %}
@@ -19,181 +20,30 @@
     {# 视频列表 #}
     <section id="video_list" style="margin-top: 0px">
     <div class="video_main_box">
+        {% for video in video_list %}
         <div class="video_box">
-            <a href="{{ url_for('video.detail') }}"  style="text-decoration: none">
-            <img src="/static/image/1.png" alt="Python"/>
+            <a href=" {{  url_for('video.detail',vid=video["video_id"])}}"  style="text-decoration: none">
+            <img src="{{ video["video_image"] }}" alt="图片"/>
             <div>
-                <span class="video_title">神经网络与深度学习——TensorFlow实践</span>
+                <span class="video_title">{{ video["video_name"] }}</span>
             </div>
             <div>
                 <div  class="video_up">
                     <img src="/static/image/UP主.png" alt="UP主" style="width: 20px;height: 20px"/>
-                    <span>牟琦</span>
+                    <span>{{ video["video_author"] }}</span>
                 </div>
                 <div  class="video_counts">
-                    <span>9865次播放</span>
+                    <span>{{ video["video_view"] }}</span>
                 </div>
             </div>
             </a>
         </div>
-
-         <div class="video_box">
-            <img src="/static/image/2.png" alt="Python"/>
-            <div>
-                <span class="video_title">算法设计与分析</span>
-            </div>
-            <div>
-                <div  class="video_up">
-                    <img src="/static/image/UP主.png" alt="UP主" style="width: 20px;height: 20px"/>
-                    <span>童咏昕</span>
-                </div>
-                <div  class="video_counts">
-                    <span>156次播放</span>
-                </div>
-            </div>
-        </div>
-
-         <div class="video_box">
-            <img src="/static/image/3.png" alt="Python"/>
-            <div>
-                <span class="video_title">大学计算机—计算思维导论</span>
-            </div>
-            <div>
-                <div  class="video_up">
-                    <img src="/static/image/UP主.png" alt="UP主" style="width: 20px;height: 20px"/>
-                    <span>战德臣</span>
-                </div>
-                <div  class="video_counts">
-                    <span>6782次播放</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="video_box">
-            <img src="/static/image/4.png" alt="Python"/>
-            <div>
-                <span class="video_title">游戏引擎原理及应用</span>
-            </div>
-            <div>
-                <div  class="video_up">
-                    <img src="/static/image/UP主.png" alt="UP主" style="width: 20px;height: 20px"/>
-                    <span>韩红雷</span>
-                </div>
-                <div  class="video_counts">
-                    <span>10231次播放</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="video_box">
-            <img src="/static/image/5.png" alt="Python"/>
-            <div>
-                <span class="video_title">Python快速入门</span>
-            </div>
-            <div>
-                <div  class="video_up">
-                    <img src="/static/image/UP主.png" alt="UP主" style="width: 20px;height: 20px"/>
-                    <span>白小白</span>
-                </div>
-                <div  class="video_counts">
-                    <span>2520次播放</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="video_box">
-            <img src="/static/image/6.png" alt="Python"/>
-            <div>
-                <span class="video_title">Spark编程基础</span>
-            </div>
-            <div>
-                <div  class="video_up">
-                    <img src="/static/image/UP主.png" alt="UP主" style="width: 20px;height: 20px"/>
-                    <span>林子雨</span>
-                </div>
-                <div  class="video_counts">
-                    <span>3869次播放</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="video_box">
-            <img src="/static/image/7.png" alt="Python"/>
-            <div>
-                <span class="video_title">计算机控制系统</span>
-            </div>
-            <div>
-                <div  class="video_up">
-                    <img src="/static/image/UP主.png" alt="UP主" style="width: 20px;height: 20px"/>
-                    <span>关守平</span>
-                </div>
-                <div  class="video_counts">
-                    <span>1024次播放</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="video_box">
-            <img src="/static/image/8.png" alt="Python"/>
-            <div>
-                <span class="video_title">VisualBasic6.0程序设计</span>
-            </div>
-            <div>
-                <div  class="video_up">
-                    <img src="/static/image/UP主.png" alt="UP主" style="width: 20px;height: 20px"/>
-                    <span>龚沛曾</span>
-                </div>
-                <div  class="video_counts">
-                    <span>356次播放</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="video_box">
-            <img src="/static/image/9.png" alt="Python"/>
-            <div>
-                <span class="video_title">云计算技术与应用</span>
-            </div>
-            <div>
-                <div  class="video_up">
-                    <img src="/static/image/UP主.png" alt="UP主" style="width: 20px;height: 20px"/>
-                    <span>孙宁</span>
-                </div>
-                <div  class="video_counts">
-                    <span>6876次播放</span>
-                </div>
-            </div>
+        {% endfor %}
+        {#  分页显示  #}
+        <div class="video_page">
+            {{ paginate.links }}
         </div>
     </div>
     </section>
-    {# 底部页码 #}
-    <section>
-        <div class="video_page">
-            <nav aria-label="Page navigation">
-                <ul class="pagination">
-                    <li>
-                        <a href="#" aria-label="First">
-                            <span aria-hidden="true">首页</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" aria-label="Previous">
-                            <span aria-hidden="true">上一页</span>
-                        </a>
-                    </li>
-                    <li><a href="#">1&nbsp;/&nbsp;10</a></li>
-                    <li>
-                        <a href="#" aria-label="Next">
-                            <span aria-hidden="true">下一页</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" aria-label="Last">
-                            <span aria-hidden="true">尾页</span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
-        </div>
-    </section>
+
 {% endblock %}

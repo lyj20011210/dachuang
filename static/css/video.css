@@ -19,6 +19,13 @@
     font-weight: bold;
     font-family: "微软雅黑";
     font-size: 20px;
+    /* 文本超出显示成... */
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    /* 设置可显示的行数 */
+    -webkit-line-clamp: 1;
+    overflow: hidden;
 }
 .video_up{
     font-family:"微软雅黑";
@@ -33,6 +40,7 @@
     float: right;
 }
 .video_page{
+    clear: both;
     width:1200px;
     margin:0 auto;
     text-align: center;
@@ -53,7 +61,7 @@
 }
 .video_detail_right{
     position: relative;
-    width: 450px;
+    width: 400px;
     height:  750px;
     float: right;
     margin-right: 20px;
@@ -67,15 +75,16 @@
     font-size: 20px;
 }
 .video_detail_right table{
+    border-collapse: separate;
+    border-spacing: 10px 20px;
     border-radius: 5px;
     box-shadow: 2px 2px 5px #1a1e24;
     box-sizing: border-box;
     width: 100%;
-    max-width: 100%;
     margin-bottom: 20px;
-
 }
 .td1{
+    width: 80px;
     color:#ccc;
     font-weight:bold;
     font-style:italic;
