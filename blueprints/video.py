@@ -77,27 +77,22 @@ def index(page):
             k=list(k)
             k=k[0]
             videolist.append(k)
-        print(videolist)
+        print("videolist:",videolist)
         user = session.get("name")
-        sql = "select * from video_list"
-        # 分页语句
-        limitpart = " LIMIT {limit} offset {offset} "
+
+        total=len(videolist)
         # 每页记录行数定为9
         limit = 9
         # 获取当前页码
         page = request.args.get(get_page_parameter(), type=int, default=int(page))
         # 判断当前行和偏移量
         offset = (9 * int(page) - 9)
-        # 获取总页数
-        sqlcount = "select count(*) from ( " + sql + " )t1"
-        total = db.session.execute(sqlcount).fetchone()[0]
-        # 获取当前页的SQL语句
-        sql = sql + limitpart
-        sql = sql.format(limit=limit, offset=offset)
+
+        video_list=videolist[offset:offset+limit:1]
+
         # 获取分页代码
         paginate = Pagination(page=page, total=total, per_page=9)
-        return render_template("index.html", user=user, video_list=videolist, paginate=paginate)
-
+        return render_template("index.html", user=user, video_list=video_list, paginate=paginate)
 
 @bp.route("/detail")
 def detail():
