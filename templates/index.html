@@ -3,8 +3,8 @@
 {% endblock %}
 
 {% block head %}
-        <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/video.css') }}">
-        <meta name="referrer" content="no-referrer">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/video.css') }}">
+    <meta name="referrer" content="no-referrer">
 {% endblock %}
 
 {% block body %}
@@ -19,31 +19,35 @@
 
     {# 视频列表 #}
     <section id="video_list" style="margin-top: 0px">
-    <div class="video_main_box">
-        {% for video in video_list %}
-        <div class="video_box">
-            <a href=" {{  url_for('video.detail',vid=video["video_id"])}}"  style="text-decoration: none">
-            <img src="{{ video["video_image"] }}" alt="图片"/>
-            <div>
-                <span class="video_title">{{ video["video_name"] }}</span>
-            </div>
-            <div>
-                <div  class="video_up">
-                    <img src="/static/image/UP主.png" alt="UP主" style="width: 20px;height: 20px"/>
-                    <span>{{ video["video_author"] }}</span>
+        <div class="video_main_box">
+            {% for video in video_list %}
+                <div class="video_box">
+                    <a href=" {{ url_for('video.detail',vid=video["video_id"]) }}" style="text-decoration: none">
+                        <img src="{{ video["video_image"] }}" alt="图片"/>
+                        <div>
+                            <span class="video_title">{{ video["video_name"] }}</span>
+                        </div>
+                        <div>
+                            <div class="video_up">
+                                <img src="/static/image/UP主.png" alt="UP主" style="width: 20px;height: 20px"/>
+                                <span>{{ video["video_author"] }}</span>
+                            </div>
+                            {% for j in score %}
+                                {% if video['video_id']==j[0] %}
+                                <div class="video_counts">
+                                    <span>推荐指数:{{ j[1] }}</span>
+                                </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </a>
                 </div>
-                <div  class="video_counts">
-                    <span>{{ video["video_view"] }}</span>
-                </div>
+            {% endfor %}
+            {#  分页显示  #}
+            <div class="video_page">
+                {{ paginate.links }}
             </div>
-            </a>
         </div>
-        {% endfor %}
-        {#  分页显示  #}
-        <div class="video_page">
-            {{ paginate.links }}
-        </div>
-    </div>
     </section>
 
 {% endblock %}

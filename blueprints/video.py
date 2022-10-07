@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from flask import Blueprint, render_template, session, request, redirect, url_for
 from flask_paginate import get_page_parameter, Pagination
 import funtion as fun
@@ -32,67 +34,41 @@ def index(page):
         video_list = db.session.execute(sql)
         print(video_list)
         # 获取分页代码
-        video_list=list(video_list)
+        video_list = list(video_list)
         print(video_list)
         paginate = Pagination(page=page, total=total, per_page=9)
         return render_template("index.html", user=user, video_list=video_list, paginate=paginate)
     else:
-        sql = "select * from user_interest where user_name= '" + session.get("name") + "'"
-        print(sql)
-        usertag = db.session.execute(sql)
-        usertag = list(usertag)
-        print(usertag)
-        sql = "select * from videos_interest"
-        videotag = db.session.execute(sql)
-        videotag = list(videotag)
-        print(videotag)
-        num = db.session.execute("select count(*) from videos_interest")
-        num = list(num)
-        num = num[0][0]
-        ScoreMatrix = fun.count(usertag, videotag, num)
-        n = 0
-        while True:
-            if n == num:
-                break
-            m = 0
-            while True:
-                if m + 1 == num:
-                    break
-                if ScoreMatrix[m][1] < ScoreMatrix[m + 1][1]:
-                    temp = np.zeros(2)
-                    temp[0] = ScoreMatrix[m][0]
-                    temp[1] = ScoreMatrix[m][1]
-                    ScoreMatrix[m] = ScoreMatrix[m + 1]
-                    ScoreMatrix[m + 1] = [temp[0], temp[1]]
-                m = m + 1
-            n = n + 1
+        ScoreMatrix = fun.getScoreMatrix()
         video_id_list = []
         for i in ScoreMatrix:
             video_id_list.append(int(i[0]))
-        videolist=[]
+        videolist = []
         for i in video_id_list:
             j = str(i)
             sql = "select * from video_list where video_id=" + j
-            k=db.session.execute(sql)
-            k=list(k)
-            k=k[0]
+            k = db.session.execute(sql)
+            k = list(k)
+            k = k[0]
             videolist.append(k)
-        print("videolist:",videolist)
+        n = 0
+        for i in ScoreMatrix:
+            i[1] = Decimal(str(round(i[1], 4)))*100
+            print(i)
+        print("videolist:", videolist)
         user = session.get("name")
-
-        total=len(videolist)
+        total = len(videolist)
         # 每页记录行数定为9
         limit = 9
         # 获取当前页码
         page = request.args.get(get_page_parameter(), type=int, default=int(page))
         # 判断当前行和偏移量
         offset = (9 * int(page) - 9)
-
-        video_list=videolist[offset:offset+limit:1]
-
+        video_list = videolist[offset:offset + limit:1]
         # 获取分页代码
         paginate = Pagination(page=page, total=total, per_page=9)
-        return render_template("index.html", user=user, video_list=video_list, paginate=paginate)
+        return render_template("index.html", user=user, video_list=video_list, paginate=paginate, score=ScoreMatrix)
+
 
 @bp.route("/detail")
 def detail():
