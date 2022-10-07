@@ -48,14 +48,12 @@ def enter():
     allLabel1 = []
     for i in allLabel:
         allLabel1.append(i[0])
-    print(allLabel1) \
         # 把用户所有的标签数据归零
     for i in allLabel1:
         str = "update user_interest set " + i + " = 0 where user_name ='" + session.get("name") + "'"
         db.session.execute(str);
     for i in myLabel:
         str = "update user_interest set " + i + " = 1 where user_name = '" + session.get("name") + "'"
-        print(str)
         db.session.execute(str)
     db.session.commit()
     return redirect(url_for('person.person'))

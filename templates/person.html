@@ -44,7 +44,7 @@
                     <div>
                         <a href="#">
                             <p></p>
-                            <span>自我介绍</span>
+                            <span>标签选择</span>
                         </a>
                     </div>
                     <div>
@@ -69,19 +69,21 @@
                 <div class="main_right">
                     <div class="content user_hidden" style="display: block">
                         <div>
-                            <div>我感兴趣的标签</div>
+                            <p>我感兴趣的标签</p>
+                        <div style="margin: 0 auto;position: relative">
                             {% for i in showtap %}
-                                <label>
+                                <label style="width:auto;height:auto;color:#fff;background:orange;line-height: 26px;text-align: center;border-radius: 4px;font-size:30px;margin-left: 10px;cursor: pointer;display: inline-block;margin-top: 20px;padding: 10px;">
                                     {{ i }}
                                 </label>
                             {% endfor %}
+                        </div>
                         </div>
                     </div>
                     <div class="content user_hidden">
                         <form action="{{ url_for('person.enter') }}" method="post">
                             <div>
                                 {% for i in taplist %}
-                                    <label>
+                                    <label style="width:auto;height:auto;color:#fff;background:orange;line-height: 26px;text-align: center;border-radius: 4px;font-size:30px;margin-left: 10px;cursor: pointer;display: inline-block;margin-top: 20px;padding: 10px;">
                                         {{ i }}
                                     </label>
                                     <input name="tap" value={{ i }} type="checkbox">
