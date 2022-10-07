@@ -18,7 +18,9 @@ def register():
         passwd2 = form.password2.data
         print(passwd2)
         user = UserModel(username=user, password=passwd1)
+        sql="insert into user_interest(user_name) values('"+request.form.get('id')+"')"
         db.session.add(user)
+        db.session.execute(sql)
         db.session.commit()
         return redirect(url_for("login.login"))
 
