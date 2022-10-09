@@ -1,3 +1,4 @@
+import json
 from decimal import Decimal
 
 from flask import Blueprint, render_template, session, request, redirect, url_for
@@ -53,7 +54,7 @@ def index(page):
             videolist.append(k)
         n = 0
         for i in ScoreMatrix:
-            i[1] = Decimal(str(round(i[1], 4)))*100
+            i[1] = Decimal(str(round(i[1], 4))) * 100
             print(i)
         print("videolist:", videolist)
         user = session.get("name")
@@ -73,6 +74,32 @@ def index(page):
 @bp.route("/detail")
 def detail():
     vid = request.args.get("vid")
+    session['vid'] = vid
     sql = "select * from video_list where video_id=" + vid
     video_list = db.session.execute(sql)
     return render_template("detail.html", video_list=video_list)
+
+
+@bp.route("/score", methods=['GET', 'POST'])
+def score():
+    score = request.args.get('name')
+    username = session.get("name")
+    vid = session.get('vid')
+    vid=int(vid)
+    sql = "select * from giveVideoScore "
+    flag = db.session.execute(sql)
+    flag=list(flag)
+    print(flag)
+    for i in flag:
+        if i[1] == username:
+            if i[2] == vid:
+                sql = "update giveVideoScore set score="+score+" where user='"+username+"' and videoid="+str(vid)
+                print(sql)
+                db.session.execute(sql)
+                db.session.commit()
+                return "hello"
+    sql = "insert into giveVideoScore(user, videoid, score) values('" + username + "'," + str(vid) + "," + score + ")"
+    print(sql)
+    db.session.execute(sql)
+    db.session.commit()
+    return "hello"
