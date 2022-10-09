@@ -4,59 +4,82 @@
 
 {% block head %}
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/video.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/detail.css') }}">
 {% endblock %}
 <h>视频详情介绍</h>
 {% block body %}
-{#视频栏#}
-{% for video in video_list %}
-    <section id="">
-        <div class="video_detail_left">
-            <iframe src="{{ video["video_link"] }}"
-                    scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"
-                    sandbox="allow-top-navigation allow-same-origin allow-forms allow-scripts">
-            </iframe>
-        </div>
-
-        <div class="video_detail_right">
-            <div class="video_introduce">
-                <img src="{{ video["video_image"] }}" alt="图片" style="width: 228px;height: 132px;border-radius: 20px;"/>
-                <p><span class="video_introduce_title">{{ video["video_name"] }}</span></p>
+    {#视频栏#}
+    <div style="height: auto;width: auto">
+    {% for video in video_list %}
+        <section id="">
+            <div class="video_detail_left">
+                <iframe src="{{ video["video_link"] }}"
+                        scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"
+                        sandbox="allow-top-navigation allow-same-origin allow-forms allow-scripts">
+                </iframe>
             </div>
-            <table>
-                <tr>
-                    <td class="td1">up主</td>
-                    <td>{{ video["video_author"] }}</td>
-                </tr>
-                <tr>
-                    <td class="td1">类型</td>
-                    <td>{{ video["video_tag"] }}</td>
-                </tr>
-                <tr>
-                    <td class="td1">发布时间</td>
-                    <td>{{ video["video_publishedtime"] }}</td>
-                </tr>
-                <tr>
-                    <td class="td1">播放量</td>
-                    <td>{{ video["video_view"] }}</td>
-                </tr>
-                <tr>
-                    <td class="td1">评论量</td>
-                    <td>{{ video["video_comment"] }}</td>
-                </tr>
-                <tr>
-                    <td class="td1">点赞量</td>
-                    <td>{{ video["video_like"] }}</td>
-                </tr>
-                <tr>
-                    <td class="td1">收藏量</td>
-                    <td>{{ video["video_collection"] }}</td>
-                </tr>
-                <tr>
-                    <td class="td1">视频介绍</td>
-                    <td>{{ video["video_introduce"] }}</td>
-                </tr>
-            </table>
+
+            <div class="video_detail_right">
+                <div class="video_introduce">
+                    <img src="{{ video["video_image"] }}" alt="图片"
+                         style="width: 228px;height: 132px;border-radius: 20px;"/>
+                    <p><span class="video_introduce_title">{{ video["video_name"] }}</span></p>
+                </div>
+                <table>
+                    <tr>
+                        <td class="td1">up主</td>
+                        <td>{{ video["video_author"] }}</td>
+                    </tr>
+                    <tr>
+                        <td class="td1">类型</td>
+                        <td>{{ video["video_tag"] }}</td>
+                    </tr>
+                    <tr>
+                        <td class="td1">发布时间</td>
+                        <td>{{ video["video_publishedtime"] }}</td>
+                    </tr>
+                    <tr>
+                        <td class="td1">播放量</td>
+                        <td>{{ video["video_view"] }}</td>
+                    </tr>
+                    <tr>
+                        <td class="td1">评论量</td>
+                        <td>{{ video["video_comment"] }}</td>
+                    </tr>
+                    <tr>
+                        <td class="td1">点赞量</td>
+                        <td>{{ video["video_like"] }}</td>
+                    </tr>
+                    <tr>
+                        <td class="td1">收藏量</td>
+                        <td>{{ video["video_collection"] }}</td>
+                    </tr>
+                    <tr>
+                        <td class="td1">视频介绍</td>
+                        <td>{{ video["video_introduce"] }}</td>
+                    </tr>
+                </table>
+            </div>
+        </section>
+    {% endfor %}
+    <div style="clear: both"></div>
+    </div>
+    <div>
+        <div id="starRating">
+            <p class="photo">
+                <span><i class="high"></i><i class="nohigh"></i></span>
+                <span><i class="high"></i><i class="nohigh"></i></span>
+                <span><i class="high"></i><i class="nohigh"></i></span>
+                <span><i class="high"></i><i class="nohigh"></i></span>
+                <span><i class="high"></i><i class="nohigh"></i></span>
+            </p>
+            <p class="starNum">0.0分</p>
+            <div class="bottoms">
+                <a class="garyBtn cancleStar">取消评分</a><a class="blueBtn sureStar">确认</a>
+            </div>
+
         </div>
-    </section>
-{% endfor %}
+        <script src="../static/plugins/JQurey.js"></script>
+        <script src="../static/JS/detail.js"></script>
+    </div>
 {% endblock %}

@@ -16,7 +16,7 @@ def like(user, video):
         flag=video[i]+flag
     for i in range(num):
         video[i] = video[i] * (video[i] / flag)
-    print(video)
+    # print(video)
     res = 1 - spatial.distance.cosine(user, video)
     return res
 
@@ -33,7 +33,7 @@ def count(user, video, num):
         n = n + 1
         if n == num:
             break
-    print(d)
+    # print(d)
     return d
     # while True:
     #     c.append(video[n][1:])
