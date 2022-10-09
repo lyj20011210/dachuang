@@ -16,7 +16,7 @@ bp = Blueprint("video", __name__, url_prefix="/")
 def index(page):
     if session.get("name") is None:
         user = session.get("name")
-        print(user)
+        # print(user)
         sql = "select * from video_list"
         # 分页语句
         limitpart = " LIMIT {limit} offset {offset} "
@@ -33,10 +33,10 @@ def index(page):
         sql = sql + limitpart
         sql = sql.format(limit=limit, offset=offset)
         video_list = db.session.execute(sql)
-        print(video_list)
+        # print(video_list)
         # 获取分页代码
         video_list = list(video_list)
-        print(video_list)
+        # print(video_list)
         paginate = Pagination(page=page, total=total, per_page=9)
         return render_template("index.html", user=user, video_list=video_list, paginate=paginate)
     else:
@@ -55,8 +55,8 @@ def index(page):
         n = 0
         for i in ScoreMatrix:
             i[1] = Decimal(str(round(i[1], 4))) * 100
-            print(i)
-        print("videolist:", videolist)
+            # print(i)
+        # print("videolist:", videolist)
         user = session.get("name")
         total = len(videolist)
         # 每页记录行数定为9
@@ -89,17 +89,17 @@ def score():
     sql = "select * from giveVideoScore "
     flag = db.session.execute(sql)
     flag=list(flag)
-    print(flag)
+    # print(flag)
     for i in flag:
         if i[1] == username:
             if i[2] == vid:
                 sql = "update giveVideoScore set score="+score+" where user='"+username+"' and videoid="+str(vid)
-                print(sql)
+                # print(sql)
                 db.session.execute(sql)
                 db.session.commit()
                 return "hello"
     sql = "insert into giveVideoScore(user, videoid, score) values('" + username + "'," + str(vid) + "," + score + ")"
-    print(sql)
+    # print(sql)
     db.session.execute(sql)
     db.session.commit()
     return "hello"
