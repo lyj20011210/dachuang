@@ -70,7 +70,31 @@ def index(page):
         paginate = Pagination(page=page, total=total, per_page=9)
         return render_template("index.html", user=user, video_list=video_list, paginate=paginate, score=ScoreMatrix)
 
+# 搜索功能
+@bp.route('/search/<int:page>/')
+def search(page=1):
+    user = session.get("name")
 
+    select_type = request.args["type"]
+    search_content = request.args["content"]
+    sql = "select * from video_list where  {}  like '%{}%'".format(select_type, search_content)
+    print(sql)
+    videolist = list(db.session.execute(sql))
+    print("videolist",videolist)
+
+    total = len(videolist)
+    # 每页记录行数定为9
+    limit = 9
+    # 判断当前行和偏移量
+    offset = (9 * int(page) - 9)
+    videolist = videolist[offset:offset + limit:1]
+    # 获取分页代码
+    paginate = Pagination(page=page, total=total, per_page=9)
+
+    return render_template("search.html", user=user, video_list=videolist, paginate=paginate)
+
+
+# 转到视频播放页面
 @bp.route("/detail")
 def detail():
     vid = request.args.get("vid")
