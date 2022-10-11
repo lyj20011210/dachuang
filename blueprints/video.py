@@ -101,7 +101,20 @@ def detail():
     session['vid'] = vid
     sql = "select * from video_list where video_id=" + vid
     video_list = db.session.execute(sql)
-    return render_template("detail.html", video_list=video_list)
+    sql = "select * from giveVideoScore"
+    scorelist = db.session.execute(sql)
+    scorelist = list(scorelist)
+    name=session.get("name")
+    score="未评分"
+    vid=int(vid)
+    for i in scorelist:
+        print(i)
+        if i[1]==name:
+            if i[2]==vid:
+                score=i[3]
+                print(score)
+                break;
+    return render_template("detail.html", video_list=video_list,score=score)
 
 
 @bp.route("/score", methods=['GET', 'POST'])
@@ -109,15 +122,16 @@ def score():
     score = request.args.get('name')
     username = session.get("name")
     vid = session.get('vid')
-    vid=int(vid)
+    vid = int(vid)
     sql = "select * from giveVideoScore "
     flag = db.session.execute(sql)
-    flag=list(flag)
+    flag = list(flag)
     # print(flag)
     for i in flag:
         if i[1] == username:
             if i[2] == vid:
-                sql = "update giveVideoScore set score="+score+" where user='"+username+"' and videoid="+str(vid)
+                sql = "update giveVideoScore set score=" + score + " where user='" + username + "' and videoid=" + str(
+                    vid)
                 # print(sql)
                 db.session.execute(sql)
                 db.session.commit()
@@ -126,4 +140,4 @@ def score():
     # print(sql)
     db.session.execute(sql)
     db.session.commit()
-    return "hello"
+    return redirect(url_for('detail'))
