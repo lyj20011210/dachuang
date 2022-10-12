@@ -5,33 +5,51 @@ import numpy as np
 from exts import db
 
 
-
-def like(a, b):
-    # 求余弦相似度算法
-    res = 1 - spatial.distance.cosine(a, b)
+def like(user, video):
+    # 求余弦相似度算法,经过改良之后，首先提取标签总数，再将每个视频标签的值除以该标签值，从而减少因为标签个数引起的分数过高，使单个标签的视频能获得更高的推荐权重
+    sql = "select count(*) from label"
+    num = db.session.execute(sql)
+    num = int(list(num)[0][0])
+    video=list(video)
+    flag=0
+    for i in range(num):
+        flag=video[i]+flag
+    for i in range(num):
+        video[i] = video[i] * (video[i] / flag)
+    # print(video)
+    res = 1 - spatial.distance.cosine(user, video)
     return res
 
 
 def count(user, video, num):
     a = user[0]  # a是提取出人物的标签信息
-    uscore = a[2:]
+    uscore = a[2:]  # 得到人物标签矩阵
     n = 0
-    c = []
+    d = np.zeros((num, 2))  # d用于储存视频标签以及其对应的分数
     while True:
-        c.append(video[n][1:])
+        score = like(uscore, video[n][2:])
+        d[n][0] = video[n][1]
+        d[n][1] = score
         n = n + 1
         if n == num:
             break
-    d = np.zeros((num, 2))  # d用于储存视频标签以及其对应的分数
-    n = 1
-    print(c)
-    for i in c:
-        j = like(uscore, i[1:])
-        d[n - 1][0] = n
-        d[n - 1][1] = j
-        n = n + 1
     # print(d)
     return d
+    # while True:
+    #     c.append(video[n][1:])
+    #     n = n + 1
+    #     if n == num:
+    #         break
+    # d = np.zeros((num, 2))  # d用于储存视频标签以及其对应的分数
+    # n = 1
+    # print(c)
+    # for i in c:
+    #     j = like(uscore, i[1:])
+    #     d[n - 1][0] = n
+    #     d[n - 1][1] = j
+    #     n = n + 1
+    # # print(d)
+    # return d
 
 
 def getScoreMatrix():
@@ -53,7 +71,7 @@ def getScoreMatrix():
         while True:
             if m + 1 == num:
                 break
-            if ScoreMatrix[m][1] < ScoreMatrix[m + 1][1]:
+            if ScoreMatrix[m][1] < ScoreMatrix[m + 1][1]:  # 对评分矩阵进行排序
                 temp = np.zeros(2)
                 temp[0] = ScoreMatrix[m][0]
                 temp[1] = ScoreMatrix[m][1]
