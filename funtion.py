@@ -83,7 +83,14 @@ def getScoreMatrix():
 
 # 以下是基于用户的协同过滤算法
 
-def data_deal(data):
+# 定义一个全局的data空字典
+data = {}
+# 定义一个全局的w相似度矩阵
+w = []
+def data_deal():
+    sql="select user,videoid,score from giveVideoScore"
+    arr=db.session.execute(sql)
+    arr=list(arr)
     '''
     input: a=[[111,201,4],
        [111,202,3],
@@ -105,28 +112,33 @@ def cos_sim(x, y):
             y:传递另一个字典的key
     output: x和y之间的余弦相似度
     '''
+    # data是处理好二维矩阵的字典
+    data = data_deal()
+
     # vec1、2用来储存x和y共同有的视频的评分
     vec1 = []
     vec2 = []
 
-    min = data.get(x)
-    max = data.get(y)
+    min_data = data.get(x)
+    max_data = data.get(y)
     # 将较短的字典赋值给min，较长的赋值给max
-    if(len(min)>len(max)):
-        tmp = min
-        min = max
-        max = tmp
+    if len(min_data)>len(max_data):
+        tmp = min_data
+        min_data = max_data
+        max_data = tmp
 
-    for i in min:
-        if(i in max):
-            vec1.append(max.get(i))
-            vec2.append(min.get(i))
+    for i in min_data:
+        if(i in max_data):
+            vec1.append(max_data.get(i))
+            vec2.append(min_data.get(i))
 
     cos_sim1 = 1 - spatial.distance.cosine(vec1,vec2)
     return cos_sim1
 
 
-def similarity(data):
+def similarity():
+    # data是处理好二维矩阵的字典
+    data = data_deal()
     '''计算矩阵中任意两行之间的相似度
     input:  data(mat):任意矩阵
     output: w(mat):任意两行之间的相似度
@@ -163,13 +175,13 @@ def user_based_recommend( user_id ):
         if(w[s,i]>0.7):
             user.append(lt[i]);
 
-    # 1、找到用户user_id没有互动过的视频，对没有互动过的视频进行选取，大于3分才推荐
+    # 1、找到用户user_id没有互动过的视频，对没有互动过的视频进行选取，大于5分才推荐
     not_inter = []
     for i in user:
         di = data.get(i)
         video = di.keys()
         for j in video:
-            if ((j not in d) and (di.get(j) > 3)):
+            if ((j not in d) and (di.get(j) > 5)):
                 not_inter.append(j)
 
     return list(set(not_inter))
