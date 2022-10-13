@@ -80,3 +80,111 @@ def getScoreMatrix():
             m = m + 1
         n = n + 1
     return ScoreMatrix
+
+# 以下是基于用户的协同过滤算法
+
+def data_deal(data):
+    '''
+    input: a=[[111,201,4],
+       [111,202,3],
+       [111,203,4]]
+    output: a={'111':{'201':4,'202':3,'203':4}}
+    '''
+    d = {}
+    for i in arr:
+        d[i[0]] = {}
+
+    for i in arr:
+        d[i[0]][i[1]] = i[2]
+
+    return d
+
+def cos_sim(x, y):
+    '''余弦相似性
+    input:  x:传递一个字典的key
+            y:传递另一个字典的key
+    output: x和y之间的余弦相似度
+    '''
+    # vec1、2用来储存x和y共同有的视频的评分
+    vec1 = []
+    vec2 = []
+
+    min = data.get(x)
+    max = data.get(y)
+    # 将较短的字典赋值给min，较长的赋值给max
+    if(len(min)>len(max)):
+        tmp = min
+        min = max
+        max = tmp
+
+    for i in min:
+        if(i in max):
+            vec1.append(max.get(i))
+            vec2.append(min.get(i))
+
+    cos_sim1 = 1 - spatial.distance.cosine(vec1,vec2)
+    return cos_sim1
+
+
+def similarity(data):
+    '''计算矩阵中任意两行之间的相似度
+    input:  data(mat):任意矩阵
+    output: w(mat):任意两行之间的相似度
+    '''
+    m = len(data)
+    w = np.mat(np.zeros((m, m)))
+    lt = list(data.keys())
+
+    for i in range(len(lt)):
+        for j in range(i + 1, len(lt)):
+            w[i,j] = cos_sim(lt[i],lt[j])
+            w[j, i] = w[i, j]
+
+    return w
+
+
+def user_based_recommend( user_id ):
+    '''基于用户相似性为用户user推荐商品
+    input:  data(dic):用户视频打分的字典
+            w(mat):用户之间的相似度矩阵
+            user_id(int):用户的编号
+    output: predict(list):推荐列表
+    '''
+    # d存储目标用户的字典数据
+    d = data.get(user_id).keys()
+    # lt存储所有用户的id
+    lt = list(data.keys())
+    # s表示用户所处位置
+    if lt.count(user_id):
+        s = lt.index(user_id)
+    # user数组用来存储相似度高的用户位置
+    user = []
+    for i in range(len(w)):
+        if(w[s,i]>0.7):
+            user.append(lt[i]);
+
+    # 1、找到用户user_id没有互动过的视频，对没有互动过的视频进行选取，大于3分才推荐
+    not_inter = []
+    for i in user:
+        di = data.get(i)
+        video = di.keys()
+        for j in video:
+            if ((j not in d) and (di.get(j) > 3)):
+                not_inter.append(j)
+
+    return list(set(not_inter))
+
+def top_k(predict, k):
+    '''为用户推荐前k个商品
+    input:  predict(list):排好序的商品列表
+            k(int):推荐的商品个数
+    output: top_recom(list):top_k个商品
+    '''
+    top_recom = []
+    len_result = len(predict)
+    if k >= len_result:
+        top_recom = predict
+    else:
+        for i in range(k):
+            top_recom.append(predict[i])
+    return top_recom
