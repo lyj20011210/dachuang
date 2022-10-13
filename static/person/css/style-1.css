@@ -1,5 +1,4 @@
 
-
 /* 第一栏 nav区域*/
 .sec1 {
     background: linear-gradient(to right top, #c0fff2, #48f1d5);
@@ -47,11 +46,11 @@ main {
     display: flex;
     justify-content: space-around;
     width: 1200px;
-    height: 100%;
+    /*height: 75%;*/
     border-radius: 25px;
-    background-image: linear-gradient(45deg, rgba(163, 255, 231, 0.6), rgba(255, 193, 179, 0.6));
+    border: 2px solid #337ab7;
     position: absolute;
-    top: 55%;
+    top: 45%;
     left: 50%;
     transform: translate(-50%, -50%);
     margin: 0 auto;
@@ -67,6 +66,7 @@ main {
     height: 600px;
     background-color: rgba(255, 255, 255, 0.5);
     border-radius: 25px;
+    border-right: 1px solid grey;
 }
 .main_left div {
     width: 100%;
@@ -97,9 +97,7 @@ main {
     border-radius: 100%;
     margin: 10px auto;
 }
-.myPhoto p {
-    margin: 10px auto;
-}
+
 .main_left div a {
     display: flex;
     justify-content: center;
@@ -118,49 +116,6 @@ main {
 .main_left div:hover a {
     color: #000;
 }
-.main_left div:nth-child(2) a p::before {
-    content: "\e608";
-    font-family: "iconfont";
-    font-size: 30px;
-    margin-right: 20px;
-    color: #2867ce;
-}
-.main_left div:nth-child(3) a p::before {
-    content: "\e60d";
-    font-family: "iconfont";
-    font-size: 30px;
-    margin-right: 20px;
-    color: #ffbd27;
-}
-.main_left div:nth-child(4) a p::before {
-    content: "\e614";
-    font-family: "iconfont";
-    font-size: 30px;
-    margin-right: 20px;
-    color: #4fffff;
-}
-.main_left div:nth-child(5) a p::before {
-    content: "\e600";
-    font-family: "iconfont";
-    font-size: 30px;
-    margin-right: 20px;
-    color: #f44336;
-}
-.main_left div:nth-child(6) a p::before {
-    content: "\e665";
-    font-family: "iconfont";
-    font-size: 30px;
-    margin-right: 20px;
-    color: #09bb07;
-}
-.main_left div:nth-child(7) a p::before {
-    content: "\e67c";
-    font-family: "iconfont";
-    font-size: 30px;
-    margin-right: 20px;
-    color: #93a8ff;
-}
-/* ------------------------------------------------------ */
 .main_right {
     flex: 7;
     height: 600px;
@@ -183,11 +138,10 @@ main {
     display: none;
 }
 .content img {
-    width: 640px;
-    height: 360px;
+    width: 220px;
+    height: 110px;
     border-radius: 25px;
     /* background-size: 50%; */
-    margin: 40px auto;
 }
 .content p {
     color: #426696;
@@ -205,11 +159,11 @@ main {
     width: 250px;
     height: 250px;
     border-radius: 100%;
-    margin: 80px auto;
+    /*margin: 20px auto;*/
 }
-.current {
-    background-color: rgba(255, 255, 255, 0.7);
-    border-radius: 25px;
-    /* 添加过度效果 */
-    transition: all 0.5s;
-}
+/*.current {*/
+/*    background-color: rgba(255, 255, 255, 0.7);*/
+/*    border-radius: 25px;*/
+/*    !* 添加过度效果 *!*/
+/*    transition: all 0.5s;*/
+/*}*/

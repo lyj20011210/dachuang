@@ -48,3 +48,13 @@ $(function () {
         })
     })
 })
+
+function isHidden(oDiv){
+    for(let i = 1; i<=6; i++){
+        let vDiv = document.getElementById('div' + i);
+        vDiv.style.display = 'none';
+    }
+    let cDiv = document.getElementById(oDiv);
+    cDiv.style.display = 'block';
+
+}
