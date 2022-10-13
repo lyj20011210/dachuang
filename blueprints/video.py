@@ -1,7 +1,7 @@
 import json
 from decimal import Decimal
 
-from flask import Blueprint, render_template, session, request, redirect, url_for
+from flask import Blueprint, render_template, session, request, redirect, url_for, flash
 from flask_paginate import get_page_parameter, Pagination
 import funtion as fun
 import config
@@ -16,6 +16,8 @@ bp = Blueprint("video", __name__, url_prefix="/")
 def index(page):
     if session.get("name") is None:
         user = session.get("name")
+        if user is None:
+            user = "未登录"
         # print(user)
         sql = "select * from video_list"
         # 分页语句
@@ -70,6 +72,7 @@ def index(page):
         paginate = Pagination(page=page, total=total, per_page=9)
         return render_template("index.html", user=user, video_list=video_list, paginate=paginate, score=ScoreMatrix)
 
+
 # 搜索功能
 @bp.route('/search/<int:page>/')
 def search(page=1):
@@ -80,7 +83,7 @@ def search(page=1):
     sql = "select * from video_list where  {}  like '%{}%'".format(select_type, search_content)
     print(sql)
     videolist = list(db.session.execute(sql))
-    print("videolist",videolist)
+    print("videolist", videolist)
 
     total = len(videolist)
     # 每页记录行数定为9
@@ -104,17 +107,17 @@ def detail():
     sql = "select * from giveVideoScore"
     scorelist = db.session.execute(sql)
     scorelist = list(scorelist)
-    name=session.get("name")
-    score="未评分"
-    vid=int(vid)
+    name = session.get("name")
+    score = "未评分"
+    vid = int(vid)
     for i in scorelist:
         print(i)
-        if i[1]==name:
-            if i[2]==vid:
-                score=i[3]
+        if i[1] == name:
+            if i[2] == vid:
+                score = i[3]
                 print(score)
                 break;
-    return render_template("detail.html", video_list=video_list,score=score)
+    return render_template("detail.html", video_list=video_list, score=score)
 
 
 @bp.route("/score", methods=['GET', 'POST'])
@@ -126,6 +129,9 @@ def score():
     sql = "select * from giveVideoScore "
     flag = db.session.execute(sql)
     flag = list(flag)
+    if username is None:
+        flash("你还未登录")
+        return "hello"
     # print(flag)
     for i in flag:
         if i[1] == username:

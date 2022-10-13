@@ -37,7 +37,7 @@ $(function () {
         $('.starNum').html(starRating.toFixed(1) + '分');
     });
     //确定评分
-
+    
     $('.sureStar').on('click', function () {
         if (starRating === 0) {
             alert('最低一颗星！');
