@@ -42,10 +42,10 @@ def index(page):
         paginate = Pagination(page=page, total=total, per_page=9)
         return render_template("index.html", user=user, video_list=video_list, paginate=paginate)
     else:
-        ScoreMatrix = fun.getScoreMatrix()
+        ScoreMatrix = fun.getScoreMatrix()#此变量是已经经过余弦相似度得到的评分矩阵，甚至已经排序好了
         video_id_list = []
         for i in ScoreMatrix:
-            video_id_list.append(int(i[0]))
+            video_id_list.append(int(i[0]))#把已经排序好的评分矩阵
         videolist = []
         for i in video_id_list:
             j = str(i)

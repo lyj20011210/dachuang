@@ -6,29 +6,41 @@ from exts import db
 
 
 def like(user, video):
-    # 求余弦相似度算法,经过改良之后，首先提取标签总数，再将每个视频标签的值除以该标签值，从而减少因为标签个数引起的分数过高，使单个标签的视频能获得更高的推荐权重
+    # 求余弦相似度算法
     sql = "select count(*) from label"
     num = db.session.execute(sql)
     num = int(list(num)[0][0])
-    video=list(video)
-    flag=0
+    video = list(video)
+    flag = 1
     for i in range(num):
-        flag=video[i]+flag
-    for i in range(num):
-        video[i] = video[i] * (video[i] / flag)
-    # print(video)
-    res = 1 - spatial.distance.cosine(user, video)
+        if video[i] == 1 and user[i] == 1:
+            flag = flag + 1
+    # for i in range(num):
+    #     video[i] = video[i] * (video[i] / flag)
+    print(flag)
+    res = (1 - spatial.distance.cosine(user, video)) / flag
+    print(res)
     return res
 
 
-def count(user, video, num):
-    a = user[0]  # a是提取出人物的标签信息
+def count():
+    sql = "select * from user_interest where user_name= '" + session.get("name") + "'"
+    usertag = db.session.execute(sql)
+    usertag = list(usertag)
+    sql = "select * from videos_interest"
+    videotag = db.session.execute(sql)
+    videotag = list(videotag)
+    num = db.session.execute("select count(*) from videos_interest")
+    num = list(num)
+    num = num[0][0]
+
+    a = usertag[0]  # a是提取出人物的标签信息
     uscore = a[2:]  # 得到人物标签矩阵
     n = 0
     d = np.zeros((num, 2))  # d用于储存视频标签以及其对应的分数
     while True:
-        score = like(uscore, video[n][2:])
-        d[n][0] = video[n][1]
+        score = like(uscore, videotag[n][2:])
+        d[n][0] = videotag[n][1]
         d[n][1] = score
         n = n + 1
         if n == num:
@@ -53,33 +65,30 @@ def count(user, video, num):
 
 
 def getScoreMatrix():
-    sql = "select * from user_interest where user_name= '" + session.get("name") + "'"
-    usertag = db.session.execute(sql)
-    usertag = list(usertag)
-    sql = "select * from videos_interest"
-    videotag = db.session.execute(sql)
-    videotag = list(videotag)
-    num = db.session.execute("select count(*) from videos_interest")
-    num = list(num)
-    num = num[0][0]
-    ScoreMatrix = count(usertag, videotag, num)
-    n = 0
-    while True:
-        if n == num:
-            break
-        m = 0
-        while True:
-            if m + 1 == num:
-                break
-            if ScoreMatrix[m][1] < ScoreMatrix[m + 1][1]:  # 对评分矩阵进行排序
-                temp = np.zeros(2)
-                temp[0] = ScoreMatrix[m][0]
-                temp[1] = ScoreMatrix[m][1]
-                ScoreMatrix[m] = ScoreMatrix[m + 1]
-                ScoreMatrix[m + 1] = [temp[0], temp[1]]
-            m = m + 1
-        n = n + 1
+    # num = db.session.execute("select count(*) from videos_interest")#是全部视频的数量
+    ScoreMatrix = count()  # score-matrix是最终算出来的评分矩阵,后续评分的处理都该放入score-matrix中
+    ScoreMatrix = sorted(ScoreMatrix, key=(lambda x: x[1]), reverse=True)
+    print(ScoreMatrix)
+    print("ScoreMatrix")
+    print(ScoreMatrix)
+    # n = 0
+    # while True:#通过
+    #     if n == num:
+    #         break
+    #     m = 0
+    #     while True:
+    #         if m + 1 == num:
+    #             break
+    #         if ScoreMatrix[m][1] < ScoreMatrix[m + 1][1]:  # 对评分矩阵进行排序
+    #             temp = np.zeros(2)
+    #             temp[0] = ScoreMatrix[m][0]
+    #             temp[1] = ScoreMatrix[m][1]
+    #             ScoreMatrix[m] = ScoreMatrix[m + 1]
+    #             ScoreMatrix[m + 1] = [temp[0], temp[1]]
+    #         m = m + 1
+    #     n = n + 1
     return ScoreMatrix
+
 
 # 以下是基于用户的协同过滤算法
 
@@ -99,6 +108,7 @@ def data_deal(data):
 
     return d
 
+
 def cos_sim(x, y):
     '''余弦相似性
     input:  x:传递一个字典的key
@@ -112,17 +122,17 @@ def cos_sim(x, y):
     min = data.get(x)
     max = data.get(y)
     # 将较短的字典赋值给min，较长的赋值给max
-    if(len(min)>len(max)):
+    if (len(min) > len(max)):
         tmp = min
         min = max
         max = tmp
 
     for i in min:
-        if(i in max):
+        if (i in max):
             vec1.append(max.get(i))
             vec2.append(min.get(i))
 
-    cos_sim1 = 1 - spatial.distance.cosine(vec1,vec2)
+    cos_sim1 = 1 - spatial.distance.cosine(vec1, vec2)
     return cos_sim1
 
 
@@ -137,13 +147,13 @@ def similarity(data):
 
     for i in range(len(lt)):
         for j in range(i + 1, len(lt)):
-            w[i,j] = cos_sim(lt[i],lt[j])
+            w[i, j] = cos_sim(lt[i], lt[j])
             w[j, i] = w[i, j]
 
     return w
 
 
-def user_based_recommend( user_id ):
+def user_based_recommend(user_id):
     '''基于用户相似性为用户user推荐商品
     input:  data(dic):用户视频打分的字典
             w(mat):用户之间的相似度矩阵
@@ -160,7 +170,7 @@ def user_based_recommend( user_id ):
     # user数组用来存储相似度高的用户位置
     user = []
     for i in range(len(w)):
-        if(w[s,i]>0.7):
+        if (w[s, i] > 0.7):
             user.append(lt[i]);
 
     # 1、找到用户user_id没有互动过的视频，对没有互动过的视频进行选取，大于3分才推荐
@@ -173,6 +183,7 @@ def user_based_recommend( user_id ):
                 not_inter.append(j)
 
     return list(set(not_inter))
+
 
 def top_k(predict, k):
     '''为用户推荐前k个商品
