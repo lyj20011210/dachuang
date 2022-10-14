@@ -14,6 +14,8 @@ bp = Blueprint("video", __name__, url_prefix="/")
 @bp.route("/", defaults={'page': 1})
 @bp.route("/<page>")
 def index(page):
+
+
     if session.get("name") is None:
         user = session.get("name")
         if user is None:
@@ -42,6 +44,9 @@ def index(page):
         paginate = Pagination(page=page, total=total, per_page=9)
         return render_template("index.html", user=user, video_list=video_list, paginate=paginate)
     else:
+        w = fun.similarity()
+        print(w)
+
         ScoreMatrix = fun.getScoreMatrix()#此变量是已经经过余弦相似度得到的评分矩阵，甚至已经排序好了
         video_id_list = []
         for i in ScoreMatrix:
