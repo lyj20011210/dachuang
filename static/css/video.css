@@ -48,23 +48,21 @@
 
 .video_detail_left {
     position: relative;
-    width: 1200px;
+    width: 65%;
     height:  750px;
     float: left;
 }
 .video_detail_left iframe {
     position: absolute;
-    width: 1200px;
+    width: 100%;
     height: 750px;
-    left: 0;
-    top: 0;
 }
 .video_detail_right{
     position: relative;
-    width: 400px;
+    width: 25%;
     height:  750px;
     float: right;
-    margin-right: 20px;
+    margin-right: 5%;
 }
 .video_introduce{
     text-align: center;
@@ -72,7 +70,14 @@
 .video_introduce_title{
     font-family: "Microsoft YaHei";
     font-weight: bold;
-    font-size: 20px;
+    font-size: 25px;
+    /* 文本超出显示成... */
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    /* 设置可显示的行数 */
+    -webkit-line-clamp: 2;
+    overflow: hidden;
 }
 .video_detail_right table{
     border-collapse: separate;
@@ -81,11 +86,14 @@
     box-shadow: 2px 2px 5px #1a1e24;
     box-sizing: border-box;
     width: 100%;
-    margin-bottom: 20px;
+    text-align: center;
+    table-layout:fixed ;
+    word-wrap:break-word;
 }
 .td1{
-    width: 80px;
+    width: 30%;
     color:#ccc;
+    font-size: 20px;
     font-weight:bold;
     font-style:italic;
 }

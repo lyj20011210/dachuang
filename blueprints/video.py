@@ -1,12 +1,10 @@
-import json
 from decimal import Decimal
 
 from flask import Blueprint, render_template, session, request, redirect, url_for, flash
 from flask_paginate import get_page_parameter, Pagination
 import funtion as fun
-import config
 from exts import db
-import numpy as np
+
 
 bp = Blueprint("video", __name__, url_prefix="/")
 
@@ -121,7 +119,7 @@ def detail():
             if i[2] == vid:
                 score = i[3]
                 print(score)
-                break;
+                break
     return render_template("detail.html", video_list=video_list, score=score)
 
 
