@@ -1,10 +1,10 @@
 from decimal import Decimal
 
-from flask import Blueprint, render_template, session, request, redirect, url_for, flash
+from flask import Blueprint, render_template, session, request, redirect, url_for, flash, jsonify
 from flask_paginate import get_page_parameter, Pagination
 import funtion as fun
+from blueprints import person
 from exts import db
-
 
 bp = Blueprint("video", __name__, url_prefix="/")
 
@@ -12,8 +12,6 @@ bp = Blueprint("video", __name__, url_prefix="/")
 @bp.route("/", defaults={'page': 1})
 @bp.route("/<page>")
 def index(page):
-
-
     if session.get("name") is None:
         user = session.get("name")
         if user is None:
@@ -44,10 +42,10 @@ def index(page):
     else:
         # w = fun.similarity()
         # print(w)
-        ScoreMatrix = fun.getScoreMatrix()#此变量是已经经过余弦相似度得到的评分矩阵，甚至已经排序好了
+        ScoreMatrix = fun.getScoreMatrix()  # 此变量是已经经过余弦相似度得到的评分矩阵，甚至已经排序好了
         video_id_list = []
         for i in ScoreMatrix:
-            video_id_list.append(int(i[0]))#把已经排序好的评分矩阵
+            video_id_list.append(int(i[0]))  # 把已经排序好的评分矩阵
         videolist = []
         for i in video_id_list:
             j = str(i)
@@ -149,3 +147,33 @@ def score():
     db.session.execute(sql)
     db.session.commit()
     return redirect(url_for('detail'))
+
+
+@bp.route("/collects", methods=['GET', 'POST'])
+def collects():
+    collect = request.args.get('name')
+    username = session.get("name")
+    vid = session.get('vid')
+    vid = int(vid)
+    sql = "select * from user_collects "
+    flag = db.session.execute(sql)
+    flag = list(flag)
+    if username is None:
+        flash("你还未登录")
+        return "hello"
+    # print(flag)
+    for i in flag:
+        if i[1] == username:
+            if i[2] == vid:
+                sql = "update user_collects set isCollected=" + collect + " where user='" + username + "' and videoid=" + str(
+                    vid)
+                # print(sql)
+                db.session.execute(sql)
+                db.session.commit()
+                return "hello"
+    sql = "insert into user_collects(user, videoid, isCollected) values('" + username + "'," + str(
+        vid) + "," + collect + ")"
+    # print(sql)
+    db.session.execute(sql)
+    db.session.commit()
+    return redirect(url_for('video.detail'))

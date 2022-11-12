@@ -1,4 +1,6 @@
 from flask import Blueprint, render_template, redirect, request, jsonify, current_app, session, url_for, g
+
+from Models import Videos_List
 from exts import db
 
 from exts import mail
@@ -22,19 +24,19 @@ def person():
         str = "select * from user_interest where user_name= '" + session.get("name") + "'"
         persontap = db.session.execute(str)
         persontap = list(persontap)
-        print(persontap)
-        showtap=[]
+        # print(persontap)
+        showtap = []
         for i in taplist:
-            #对该用户元祖的每个标签列逐一遍历，若发现标签列值为1，则取出该标签名
-            str = "select "+i+" from user_interest where user_name = '" + session.get("name") + "'"
-            print(str)
-            j=db.session.execute(str)
-            j=list(j)
-            j=int(j[0][0])
-            if j==1:
+            # 对该用户元祖的每个标签列逐一遍历，若发现标签列值为1，则取出该标签名
+            str = "select " + i + " from user_interest where user_name = '" + session.get("name") + "'"
+            # print(str)
+            j = db.session.execute(str)
+            j = list(j)
+            j = int(j[0][0])
+            if j == 1:
                 showtap.append(i)
-        print(showtap)
-        return render_template("person.html", taplist=taplist, name=session.get("name"),showtap=showtap)
+        # print(showtap)
+        return render_template("person.html", taplist=taplist, name=session.get("name"), showtap=showtap)
     else:
         return redirect(url_for('login.login'))
 
@@ -59,57 +61,26 @@ def enter():
     return redirect(url_for('person.person'))
 
 
-@bp.route("/base_info", methods=["GET", "POST"])
-def base_info():
-    """
-    用户信息基本设置
-    用户是否登录
-    GET请求:
-        查询到性别返回到前端进行展示
-    POST请求:
-        接收参数,注意给默认值
-        昵称和性别必须要传齐
-        校验性别是否合法
-        保存到数据库
-    将session的值进行修改
-    返回结果
-    :return:
-    """
-    # 用户是否登录
-    user = g.user
-    if not user:
-        redirect(url_for("index.index"))
-
-    # GET请求:
-    if request.method == "GET":
-        context = {
-            "user": user.to_dict()
-        }
-        return render_template("news/user_base_info.html", context=context)
-    # POST请求:
-    #     接收参数,注意给默认值
-    if request.method == "POST":
-        signature = request.json.get("signature", "")
-        nick_name = request.json.get("nick_name")
-        gender = request.json.get("gender")
-
-        #     昵称和性别必须要传齐
-        if not all([nick_name, gender]):
-            return jsonify(errno="RET.PARAMERR", errmsg="参数缺少")
-
-        # 校验性别是否合法
-        if not gender in ["WOMAN", "MAN"]:
-            return jsonify(errno="RET.PARAMERR", errmsg="参数异常")
-        #     保存到数据库
-        user.signature = signature
-        user.nick_name = nick_name
-        user.gender = gender
-        try:
-            db.session.commit()
-        except Exception as e:
-            current_app.logger.error(e)
-            db.session.rollback()
-            return jsonify(errno="RET.DBERR", errmsg="修改失败")
-        # 将session的值进行修改
-        session["nick_name"] = nick_name
-        return jsonify(errno="RET.OK", errmsg="成功")
+@bp.route("/collects")
+def collects():
+    # print("测试点1")
+    if session.get("name") is not None:
+        user = session.get("name")
+        str = "select * from user_collects where user= '" + user + "'"
+        sql = db.session.execute(str)
+        sql = list(sql)
+        vid = []
+        collect = []
+        for i in sql:
+            if i[3] == 1:
+                vid.append(i[2])
+        print(vid)
+        for i in vid:
+            str = "select * from video_list where video_id= ' +i+ '"
+            sql = db.session.execute(str)
+            if sql == "":
+                print("sql错误")
+            collect.append(sql)
+        return render_template("person.html", user=user, collect_list=collect, name=session.get("name"))
+    else:
+        return redirect(url_for('login.login'))

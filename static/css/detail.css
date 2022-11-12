@@ -81,3 +81,17 @@
 .blueBtn:hover {
     background: #0e73d0;
 }
+
+
+
+.collect{
+    width: 150px;
+    height: 100px;
+    font-size: 20px;
+    text-align: center;
+    line-height: 100px;
+}
+
+
+
+

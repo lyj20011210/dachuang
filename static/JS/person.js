@@ -1,18 +1,4 @@
 $(function () {
-    // fullpage配置代码
-    $("#dowebok").fullpage({
-        sectionsColor: ["transparent", "skyblue", "purple", "yellow"],
-        loopBottom: true,
-        verticalCentered: false,
-        navigation: false,
-        navigationColor: "#ef5c19",
-        continuousVertical: true,
-        controlArrowColor: "rgba(0, 0, 0, 0.1)",
-        anchors: ["page1", "page2", "page3", "page4", "page5"],
-        easingcss3: "cubic-bezier(0.175 , 0.3 , 0.320 , 1.5)",
-        slidesNavigation: true,
-        navigationColor: "#fff",
-    });
 
     // nav部分
     $(".main_left div").mouseover(function () {
@@ -34,3 +20,18 @@ $(function () {
             .fadeOut(1200);
     });
 });
+
+function isHidden(oDiv){
+    for(let i = 1; i<=6; i++){
+        let vDiv = document.getElementById('div' + i);
+        vDiv.style.display = 'none';
+    }
+    let cDiv = document.getElementById(oDiv);
+    cDiv.style.display = 'block';
+
+}
+
+function getCookie(name) {
+    var r = document.cookie.match("\\b" + name + "=([^;]*)\\b");
+    return r ? r[1] : undefined;
+}
