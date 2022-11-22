@@ -125,7 +125,7 @@ main {
 }
 .content {
     float: right;
-    width: 98%;
+    width: 100%;
     height: 600px;
     background-color: rgba(255, 255, 255, 0.3);
     border-radius: 25px;
@@ -136,12 +136,6 @@ main {
 }
 .user_hidden {
     display: none;
-}
-.content img {
-    width: 220px;
-    height: 110px;
-    border-radius: 25px;
-    /* background-size: 50%; */
 }
 .content p {
     color: #426696;
@@ -155,10 +149,109 @@ main {
     font-weight: 700;
     margin: 20px auto 0;
 }
-.main_right div:nth-child(1) img {
-    width: 250px;
-    height: 250px;
-    border-radius: 100%;
-    /*margin: 20px auto;*/
+.collect{
+    float: left;
 }
+
+#video_list {
+	background: #f8f8f8;
+}
+#video_list img{
+    width: 250px;
+    height: 150px;
+}
+.video_main_box{
+    width:850px;
+    margin:0 auto;
+}
+.video_box{
+    width:280px;
+    height: 240px;
+    padding: 6px;
+    float: left;
+}
+.video_title{
+    font-weight: bold;
+    font-family: "微软雅黑";
+    font-size: 20px;
+    /* 文本超出显示成... */
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    /* 设置可显示的行数 */
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+}
+.video_up{
+    font-family:"微软雅黑";
+    font-size: 12px;
+    color: #8a8a8a;
+    float: left;
+}
+.video_counts{
+    font-family: "微软雅黑";
+    font-size: 1px;
+    color: #8a8a8a;
+    float: right;
+}
+.video_page{
+    clear: both;
+    width:1200px;
+    margin:0 auto;
+    text-align: center;
+}
+
+.video_detail_left {
+    position: relative;
+    width: 65%;
+    height:  750px;
+    float: left;
+}
+.video_detail_left iframe {
+    position: absolute;
+    width: 100%;
+    height: 750px;
+}
+.video_detail_right{
+    position: relative;
+    width: 25%;
+    height:  750px;
+    float: right;
+    margin-right: 5%;
+}
+.video_introduce{
+    text-align: center;
+}
+.video_introduce_title{
+    font-family: "Microsoft YaHei";
+    font-weight: bold;
+    font-size: 25px;
+    /* 文本超出显示成... */
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    /* 设置可显示的行数 */
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+}
+.video_detail_right table{
+    border-collapse: separate;
+    border-spacing: 10px 20px;
+    border-radius: 5px;
+    box-shadow: 2px 2px 5px #1a1e24;
+    box-sizing: border-box;
+    width: 100%;
+    text-align: center;
+    table-layout:fixed ;
+    word-wrap:break-word;
+}
+.td1{
+    width: 30%;
+    color:#ccc;
+    font-size: 20px;
+    font-weight:bold;
+    font-style:italic;
+}
+
+
 
