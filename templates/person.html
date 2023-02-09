@@ -4,11 +4,8 @@
 
 {% block head %}
 
-    <link rel="stylesheet" href="../static/person/css/base.css"/>
-    <link rel="stylesheet" href="../static/person/css/style-1.css"/>
-    <!-- ------------------------------------------------- -->
-    <script src="../static/person/js/index.js"></script>
-    <script src="../static/person/js/user.js"></script>
+    <link rel="stylesheet" href="../static/css/person.css"/>
+    <script src="../static/JS/person.js"></script>
 {% endblock %}
 
 {% block body %}
@@ -18,7 +15,7 @@
                 <div class="main_left">
                     <div class="myPhoto current" onclick="isHidden('div1')">
                         <a href="#" >
-                            <img src="../static/person/img.jpg" alt=""/>
+                            <img src="../static/img/img.jpg" alt=""/>
                             <h3>{{ name }}</h3>
                         </a>
                     </div>
@@ -57,13 +54,13 @@
                     <div class="content user_hidden" style="display: block" id="div1">
                         <div>
                             <p>我感兴趣的标签</p>
-                        <div style="margin: 0 auto;position: relative">
-                            {% for i in showtap %}
-                                <label style="width:auto;height:auto;color:#fff;background:orange;line-height: 26px;text-align: center;border-radius: 4px;font-size:30px;margin-left: 10px;cursor: pointer;display: inline-block;margin-top: 20px;padding: 10px;">
-                                    {{ i }}
-                                </label>
-                            {% endfor %}
-                        </div>
+                            <div style="margin: 0 auto;position: relative">
+                                {% for i in showtap %}
+                                    <label style="width:auto;height:auto;color:#fff;background:orange;line-height: 26px;text-align: center;border-radius: 4px;font-size:30px;margin-left: 10px;cursor: pointer;display: inline-block;margin-top: 20px;padding: 10px;">
+                                        {{ i }}
+                                    </label>
+                                {% endfor %}
+                            </div>
                         </div>
                     </div>
                     <div class="content user_hidden" id="div2">
@@ -100,9 +97,35 @@
                         {#                            </div>#}
                     </div>
 
-                    <div class="content user_hidden" id="div3">
-
-
+                    <div class="content user_hidden" id="div3" style="overflow-y: auto">
+                        <section id="video_list" style="margin-top: 0px">
+                            <div class="video_main_box" >
+                                {% for video in collects %}
+                                    <div class="video_box">
+                                        <a href=" {{ url_for('video.detail',vid=video["video_id"]) }}" style="text-decoration: none">
+                                            <img src="{{ video["video_image"] }}" alt="图片"/>
+                                            <div>
+                                                <span class="video_title">{{ video["video_name"] }}</span>
+                                            </div>
+                                            <div>
+                                                <div class="video_up">
+                                                    <img src="/static/image/UP主.png" alt="UP主" style="width: 20px;height: 20px"/>
+                                                    <span>{{ video["video_author"] }}</span>
+                                                </div>
+                                                {% for j in score %}
+                                                    {% if video['video_id']==j[0] %}
+                                                        <div class="video_counts">
+                                                            <span>推荐指数:{{ j[1] }}</span>
+                                                        </div>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </div>
+                                        </a>
+                                    </div>
+                                {% endfor %}
+                                {#  分页显示  #}
+                            </div>
+                        </section>
                     </div>
 
                     <div class="content user_hidden" id="div4">
@@ -117,9 +140,9 @@
 
                     <div class="content user_hidden" id="div6">
                         <div>
-{#                            <span>视频名称：</span>#}
-{#                            <span>视频链接:</span>#}
-{#                            <input type="text" class="video_url" value="">#}
+                            {#                            <span>视频名称：</span>#}
+                            {#                            <span>视频链接:</span>#}
+                            {#                            <input type="text" class="video_url" value="">#}
 
                         </div>
 
