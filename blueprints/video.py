@@ -1,10 +1,9 @@
 from decimal import Decimal
 
-from flask import Blueprint, render_template, session, request, redirect, url_for, flash
+from flask import Blueprint, render_template, session, request, redirect, url_for, flash, jsonify
 from flask_paginate import get_page_parameter, Pagination
 import funtion as fun
 from exts import db
-
 
 bp = Blueprint("video", __name__, url_prefix="/")
 
@@ -12,8 +11,6 @@ bp = Blueprint("video", __name__, url_prefix="/")
 @bp.route("/", defaults={'page': 1})
 @bp.route("/<page>")
 def index(page):
-
-
     if session.get("name") is None:
         user = session.get("name")
         if user is None:
@@ -44,10 +41,10 @@ def index(page):
     else:
         # w = fun.similarity()
         # print(w)
-        ScoreMatrix = fun.getScoreMatrix()#此变量是已经经过余弦相似度得到的评分矩阵，甚至已经排序好了
+        ScoreMatrix = fun.getScoreMatrix()  # 此变量是已经经过余弦相似度得到的评分矩阵，甚至已经排序好了
         video_id_list = []
         for i in ScoreMatrix:
-            video_id_list.append(int(i[0]))#把已经排序好的评分矩阵
+            video_id_list.append(int(i[0]))  # 把已经排序好的评分矩阵
         videolist = []
         for i in video_id_list:
             j = str(i)
@@ -79,14 +76,9 @@ def index(page):
 @bp.route('/search/<int:page>/')
 def search(page=1):
     user = session.get("name")
-
-    select_type = request.args["type"]
-    search_content = request.args["content"]
-    sql = "select * from video_list where  {}  like '%{}%'".format(select_type, search_content)
-    print(sql)
+    search_content = request.args["search_content"]
+    sql = "select * from video_list where  video_name like '%{}%'".format(search_content)
     videolist = list(db.session.execute(sql))
-    print("videolist", videolist)
-
     total = len(videolist)
     # 每页记录行数定为9
     limit = 9
@@ -95,17 +87,17 @@ def search(page=1):
     videolist = videolist[offset:offset + limit:1]
     # 获取分页代码
     paginate = Pagination(page=page, total=total, per_page=9)
-
-    return render_template("search.html", user=user, video_list=videolist, paginate=paginate)
+    return render_template("search.html", user=user, video_list=videolist,paginate=paginate)
 
 
 # 转到视频播放页面
 @bp.route("/detail")
 def detail():
+    user = session.get("name")
     vid = request.args.get("vid")
     session['vid'] = vid
-    sql = "select * from video_list where video_id=" + vid
-    video_list = db.session.execute(sql)
+
+    video_item = list(db.session.execute("select * from video_list where video_id=" + vid))
     sql = "select * from giveVideoScore"
     scorelist = db.session.execute(sql)
     scorelist = list(scorelist)
@@ -113,13 +105,17 @@ def detail():
     score = "未评分"
     vid = int(vid)
     for i in scorelist:
-        print(i)
         if i[1] == name:
             if i[2] == vid:
                 score = i[3]
                 print(score)
                 break
-    return render_template("detail.html", video_list=video_list, score=score)
+    comment_item = list(db.session.execute("select * from comment_list where video_id=" + str(vid)))
+    comment_child_item = list(db.session.execute("select * from comment_child_list"))
+    length = len(comment_item)
+    data = {"video_item": video_item, "comment_item": comment_item, "comment_child_item": comment_child_item,
+            "length": length}
+    return render_template("detail.html", user=user, score=score, data=data)
 
 
 @bp.route("/score", methods=['GET', 'POST'])
@@ -149,3 +145,50 @@ def score():
     db.session.execute(sql)
     db.session.commit()
     return redirect(url_for('detail'))
+
+
+# 评论
+@bp.route('/news_comment', methods=['POST'])
+def news_comment():
+    # 判断用户是否登录
+    username = session.get("name")
+    if username is None:
+        return jsonify(errno=1, errmsg='登录后才能评论哦!')
+
+    # 获取参数
+    video_id = session.get('vid')
+    content = request.json.get('content')
+    parent_id = str(request.json.get('parent_id'))
+    content_child = request.json.get('content_child')
+    has_child = 0
+
+    if not all([content, content_child]):
+        if content == '':
+            return jsonify(errno=2, errmsg='请输入评论内容!')
+        if content_child == '':
+            return jsonify(errno=3, errmsg='请输入回复内容!')
+    # 评论回复
+    if all([parent_id, content_child]):
+        try:
+            has_child = 1
+            sql1 = "update comment_list set has_child=" + str(has_child) + " where id=" + parent_id
+            sql2 = "insert into comment_child_list(username,parent_id,content) values('" + username + "', " + parent_id + " ,'" + content_child + "') "
+            db.session.execute(sql1)
+            db.session.execute(sql2)
+            db.session.commit()
+        except Exception as e:
+            print("回复失败!")
+
+    # 发表评论
+    if all([video_id, content]):
+        try:
+            sql1 = "update video_list  set has_comment=1 where video_id=" + video_id
+            sql2 = " insert into comment_list(video_id,username,content,has_child) values(" + video_id + ", '" + username + "', '" + content + "'," + str(
+                has_child) + ")"
+            db.session.execute(sql1)
+            db.session.execute(sql2)
+            db.session.commit()
+        except Exception as e:
+            print("评论失败!")
+
+    return redirect(url_for('video.detail'))

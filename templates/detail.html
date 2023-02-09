@@ -8,9 +8,9 @@
 {% endblock %}
 <h>视频详情介绍</h>
 {% block body %}
+    {% for video in data.video_item %}
     {#视频栏#}
     <div style="height: auto;width: auto">
-    {% for video in video_list %}
         <section id="">
             <div class="video_detail_left">
                 <iframe src="{{ video["video_link"] }}"
@@ -61,8 +61,8 @@
                 </table>
             </div>
         </section>
-    {% endfor %}
-    <div style="clear: both"></div>
+
+        <div style="clear: both"></div>
     </div>
     <div>
         <div id="starRating">
@@ -78,7 +78,65 @@
                 <a class="garyBtn cancleStar">取消评分</a><a class="blueBtn sureStar">确认</a>
             </div>
         </div>
+
+
+        <form action="" class="comment_form" >
+            <div class="person_pic">
+                <img src="static/image/comment.png" alt="用户图标">
+            </div>
+            <textarea placeholder="请发表您的评论" class="comment_input"></textarea>
+            <input type="submit" value="评 论" class="comment_sub">
+        </form>
+
+
+            <div class="comment_list_con">
+                <div class="comment_count">
+                    当前有{{ data.length }}条评论
+                </div>
+                {% if video["has_comment"]==0 %}
+                     <div class="empty_comment">
+                        <img src="static/image/empty_comment.png" >
+                        还没有评论哦，快来评论吧！
+                     </div>
+                {% endif %}
+                {# 遍历所有的评论 #}
+                {% for comment in data.comment_item %}
+                    <div class="comment_list">
+                        <div style="height: 50px;width: 500px">
+                            <span class="user_name">{{ comment["username"] }}</span>
+                            <span style="font-family: Arial ">{{ comment["comment_time"] }}</span>
+                            <span class="comment_text">{{ comment["content"] }}</span>
+                        </div>
+
+                        {# 判断是否有子评论 #}
+                        {% if comment["has_child"] %}
+                            {% for comment_child in data.comment_child_item %}
+                                {% if comment_child["parent_id"]==comment["id"] %}
+                                        <div class="reply_text_con">
+                                            <span class="user_name2">{{ comment_child["username"] }}</span>
+                                            <span style="font-family: Arial ">{{ comment_child["comment_time"] }}</span>
+                                            <span class="reply_text">{{ comment_child["content"] }}</span>
+                                        </div>
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                        <a href="javascript:" class="comment_reply fr" id="reply">回复</a>
+                        {#回复评论的表单#}
+                        <from class="reply_form" data-comment_id="{{ comment["id"] }}">
+                            <div class="person_pic">
+                                <img src="static/image/comment.png" alt="评论图标">
+                             </div>
+                            <textarea placeholder="请输入回复的内容" class="reply_input"></textarea>
+                            <input type="submit"  value="回复" class="reply_sub fr">
+                            <input type="reset"  value="取消" class="reply_cancel fr">
+                        </from>
+                    </div>
+                {% endfor %}
+            </div>
         <script src="../static/plugins/JQurey.js"></script>
         <script src="../static/JS/detail.js"></script>
+    {% endfor %}
     </div>
+
+
 {% endblock %}

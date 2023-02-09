@@ -44,9 +44,16 @@ def run_migrations_offline():
     script output.
 
     """
+
+    def include_object(object, name, type_, reflected, compare_to):
+        if type_ == "table" and reflected and compare_to is None:
+            return False
+        else:
+            return True
+
     url = config.get_main_option("sqlalchemy.url")
     context.configure(
-        url=url, target_metadata=target_metadata, literal_binds=True
+        url=url, include_object=include_object, target_metadata=target_metadata, literal_binds=True
     )
 
     with context.begin_transaction():
@@ -60,6 +67,12 @@ def run_migrations_online():
     and associate a connection with the context.
 
     """
+
+    def include_object(object, name, type_, reflected, compare_to):
+        if type_ == "table" and reflected and compare_to is None:
+            return False
+        else:
+            return True
 
     # this callback is used to prevent an auto-migration from being generated
     # when there are no changes to the schema
@@ -75,6 +88,7 @@ def run_migrations_online():
 
     with connectable.connect() as connection:
         context.configure(
+            include_object=include_object,
             connection=connection,
             target_metadata=target_metadata,
             process_revision_directives=process_revision_directives,

@@ -56,4 +56,73 @@ $(function () {
             alert('评分：' + (starRating.toFixed(1) + '分'))
         }
     })
+
+    // 评论提交
+    $(".comment_form").submit(function (e) {
+            e.preventDefault();
+            var content = $(".comment_input").val();
+            var params = {
+                "content": content
+            };
+            $.ajax({
+                url: "/news_comment",
+                type: "post",
+                contentType: "application/json",
+                data: JSON.stringify(params),
+                success: function (resp) {
+                    if (resp.errno==1){
+                        alert(resp.errmsg);
+                    }else if (resp.errno==2) {
+                        alert(resp.errmsg);
+                    }
+                    else{
+                        alert("评论成功！");
+                    }
+                }
+            })
+        location.reload();
+    })
+
+    // 评论回复
+    $('.comment_list_con').delegate('a,input','click',function(){
+        //获取到点击标签的class属性, reply_sub
+        var sHandler = $(this).prop('class');
+
+        if(sHandler.indexOf('comment_reply')>=0)
+        {
+            $(this).next().toggle();
+        }
+
+        if(sHandler.indexOf('reply_cancel')>=0)
+        {
+            $(this).parent().toggle();
+        }
+        if(sHandler.indexOf('reply_sub')>=0)
+        {
+            var $this = $(this)
+            var parent_id = $this.parent().attr('data-comment_id')
+            var content_child = $this.prev().val()
+            var params_child = {
+                "parent_id": parent_id,
+                "content_child": content_child
+            }
+            $.ajax({
+                url: "/news_comment",
+                type: "post",
+                contentType: "application/json",
+                data: JSON.stringify(params_child),
+                success: function (resp) {
+                    if (resp.errno==1){
+                        alert(resp.errmsg);
+                    }else if (resp.errno==3) {
+                        alert(resp.errmsg);
+                    }
+                    else{
+                        alert("回复成功！");
+                    }
+                }
+            })
+            location.reload();
+        }
+    })
 })
