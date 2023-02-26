@@ -24,7 +24,7 @@ def person():
         s = "select * from user_interest where user_name= '" + session.get("name") + "'"
         persontap = db.session.execute(s)
         persontap = list(persontap)
-        # print(persontap)
+        print(persontap)
         showtap = []
         for i in taplist:
             # 对该用户元祖的每个标签列逐一遍历，若发现标签列值为1，则取出该标签名

@@ -6,26 +6,181 @@
 {%  endblock %}
 
 {% block body %}
-    <div style="width: 500px;margin: 0 auto">
-        <form method="POST" action="{{ url_for('register.register') }}">
-            <div class="form-group">
-                <label for="exampleInputEmail1">用户名</label>
-                <input name="id" type="text" class="form-control" id="exampleInputEmail1">
-            </div>
-            <div class="form-group">
-                <label for="exampleInputPassword1">密码</label>
-                <input name="password1" type="password" class="form-control" id="exampleInputPassword1">
-            </div>
-            <div class="form-group">
-                <label for="exampleInputPassword1">确认密码</label>
-                <input name="password2" type="password" class="form-control" id="exampleInputPassword1">
-            </div>
-            {% for message in get_flashed_messages() %}
-                <div class="form-group">
-                    <div class="text-danger">{{ message }}</div>
+    <head>
+
+    <!-- Basic Page Needs
+    ================================================== -->
+    <title></title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <link rel="icon" href="../static/outer%20assets/assets/images/favicon.png">
+
+    <!-- CSS
+    ================================================== -->
+    <link rel="stylesheet" href="../static/outer%20assets/assets/css/style.css">
+    <link rel="stylesheet" href="../static/outer%20assets/assets/css/night-mode.css">
+    <link rel="stylesheet" href="../static/outer%20assets/assets/css/framework.css">
+
+    <!-- icons
+    ================================================== -->
+    <link rel="stylesheet" href="../static/outer%20assets/assets/css/icons.css">
+
+    <!-- Google font
+    ================================================== -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
+
+</head>
+
+    <!-- Content
+    ================================================== -->
+    <div style="height: 750px" uk-height-viewport="expand: true" class="uk-flex uk-flex-middle">
+        <div class="uk-width-1-3@m uk-width-1-2@s m-auto">
+            <div class="uk-card-default p-6 rounded">
+                <div class="my-4 uk-text-center">
+                    <h2 class="mb-0">创建账户</h2>
+                    <p class="my-2">请填写您的账户信息</p>
                 </div>
-            {% endfor %}
-            <button type="submit" class="btn btn-default">提交</button>
-        </form>
+                <form method="POST" action="{{ url_for('register.register') }}" class="uk-child-width-1-1 uk-grid-small" uk-grid>
+
+                    <div>
+                        <div class="uk-form-group">
+                            <label class="uk-form-label"> 用户名</label>
+
+                            <div class="uk-position-relative w-100">
+                                <span class="uk-form-icon">
+                                    <i class="icon-feather-user"></i>
+                                </span>
+                                <input name="id" class="uk-input" type="text" placeholder="Full name">
+                            </div>
+
+                        </div>
+                    </div>
+                    <div>
+                        <div class="uk-form-group">
+                            <label class="uk-form-label"> Email</label>
+
+                            <div class="uk-position-relative w-100">
+                                <span class="uk-form-icon">
+                                    <i class="icon-feather-mail"></i>
+                                </span>
+                                <input class="uk-input" type="email" placeholder="name@example.com">
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="uk-width-1-2@s">
+                        <div class="uk-form-group">
+                            <label class="uk-form-label"> 密码</label>
+
+                            <div class="uk-position-relative w-100">
+                                <span class="uk-form-icon">
+                                    <i class="icon-feather-lock"></i>
+                                </span>
+                                <input name="password1" class="uk-input" type="password" placeholder="********">
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="uk-width-1-2@s">
+                        <div class="uk-form-group">
+                            <label class="uk-form-label"> 确认密码</label>
+
+                            <div class="uk-position-relative w-100">
+                                <span class="uk-form-icon">
+                                    <i class="icon-feather-lock"></i>
+                                </span>
+                                <input name="password2" class="uk-input" type="password" placeholder="********">
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="mt-4 uk-flex-middle uk-grid-small" uk-grid>
+                            <div class="uk-width-expand@s">
+                                <p> 你已经有一个账户了？ <a href="{{ url_for('login.login') }}">登 录</a></p>
+                            </div>
+                            {% for message in get_flashed_messages() %}
+                                <div class="form-group">
+                                    <div class="text-danger">{{ message }}</div>
+                                </div>
+                            {% endfor %}
+                            <div class="uk-width-auto@s">
+                                <input  type="submit" class="button warning" value="注 册"></input>
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
     </div>
+
+    <script>
+        (function (window, document, undefined) {
+            'use strict';
+            if (!('localStorage' in window)) return;
+            var nightMode = localStorage.getItem('gmtNightMode');
+            if (nightMode) {
+                document.documentElement.className += ' night-mode';
+            }
+        })(window, document);
+
+
+        (function (window, document, undefined) {
+
+            'use strict';
+
+            // Feature test
+            if (!('localStorage' in window)) return;
+
+            // Get our newly insert toggle
+            var nightMode = document.querySelector('#night-mode');
+            if (!nightMode) return;
+
+            // When clicked, toggle night mode on or off
+            nightMode.addEventListener('click', function (event) {
+                event.preventDefault();
+                document.documentElement.classList.toggle('night-mode');
+                if (document.documentElement.classList.contains('night-mode')) {
+                    localStorage.setItem('gmtNightMode', true);
+                    return;
+                }
+                localStorage.removeItem('gmtNightMode');
+            }, false);
+
+        })(window, document);
+    </script>
+
+    <!-- javaScripts
+            ================================================== -->
+    <script src="assets/js/framework.js"></script>
+    <script src="assets/js/jquery-3.3.1.min.js"></script>
+    <script src="assets/js/simplebar.js"></script>
+    <script src="assets/js/main.js"></script>
+
+{#    <div style="width: 500px;margin: 0 auto">#}
+{#        <form method="POST" action="{{ url_for('register.register') }}">#}
+{#            <div class="form-group">#}
+{#                <label for="exampleInputEmail1">用户名</label>#}
+{#                <input name="id" type="text" class="form-control" id="exampleInputEmail1">#}
+{#            </div>#}
+{#            <div class="form-group">#}
+{#                <label for="exampleInputPassword1">密码</label>#}
+{#                <input name="password1" type="password" class="form-control" id="exampleInputPassword1">#}
+{#            </div>#}
+{#            <div class="form-group">#}
+{#                <label for="exampleInputPassword1">确认密码</label>#}
+{#                <input name="password2" type="password" class="form-control" id="exampleInputPassword1">#}
+{#            </div>#}
+{#            {% for message in get_flashed_messages() %}#}
+{#                <div class="form-group">#}
+{#                    <div class="text-danger">{{ message }}</div>#}
+{#                </div>#}
+{#            {% endfor %}#}
+{#            <button type="submit" class="btn btn-default">提交</button>#}
+{#        </form>#}
+{#    </div>#}
 {%  endblock %}

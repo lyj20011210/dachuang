@@ -18,6 +18,7 @@ def login():
     else:
         form = LoginForm(request.form)
         user = form.user.data
+        # print(user)
         password = request.form.get("password")
         finduser = UserModel.query.filter_by(username=user).first()
         if finduser:
@@ -26,7 +27,7 @@ def login():
             password=str(password)
             if checkpwd == password:
                 session["name"] = checkuser
-                print(session["name"])
+                # print(session["name"])
                 return redirect("/")
             else:
                 flash("密码错误")

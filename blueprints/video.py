@@ -51,6 +51,7 @@ def index(page):
             sql = "select * from video_list where video_id=" + j
             k = db.session.execute(sql)
             k = list(k)
+            # print(k)
             k = k[0]
             videolist.append(k)
         n = 0

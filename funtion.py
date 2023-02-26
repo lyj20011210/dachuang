@@ -12,6 +12,7 @@ def like(user, video):
     num = int(list(num)[0][0])
     video = list(video)
     flag = 1
+    # print(num)
     for i in range(num):
         if video[i] == 1 and user[i] == 1:
             flag = flag + 1
@@ -34,8 +35,10 @@ def count():
 
     a = usertag[0]  # a是提取出人物的标签信息
     uscore = a[2:]  # 得到人物标签矩阵
+    # print(uscore)
     n = 0
     d = np.zeros((num, 2))  # d用于储存视频标签以及其对应的分数
+
     while True:
         score = like(uscore, videotag[n][2:])  # 将该用户与该视频的评分矩阵算出来
         d[n][0] = videotag[n][1]
@@ -50,7 +53,7 @@ def getScoreMatrix():
     userbaseMatrix = user_based_recommend()
     ScoreMatrix = count()  # score-matrix是最终算出来的评分矩阵,后续评分的处理都该放入score-matrix中
     ScoreMatrix = sorted(ScoreMatrix, key=(lambda x: x[1]), reverse=True)
-
+    # print(ScoreMatrix)
     return ScoreMatrix
 
 
