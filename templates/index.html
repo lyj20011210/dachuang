@@ -4,6 +4,23 @@
 
 {% block head %}
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/video.css') }}">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <!-- CSS
+    ================================================== -->
+    <link rel="stylesheet" href="../static/assets/css/style.css">
+    <link rel="stylesheet" href="../static/assets/css/night-mode.css">
+    <link rel="stylesheet" href="../static/assets/css/framework.css">
+
+    <!-- icons
+    ================================================== -->
+    <link rel="stylesheet" href="../static/assets/css/icons.css">
+
+    <!-- Google font
+    ================================================== -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
+
     <meta name="referrer" content="no-referrer">
 {% endblock %}
 
@@ -12,42 +29,90 @@
     <section id="" style="margin-top: 0px">
         <div>
             <iframe class="" width="100%" height="375px" frameborder=0 scrolling=no
-                    src="/static/lb/lb.html">
+                    src="../static/lb/lb.html">
             </iframe>
         </div>
     </section>
 
     {# 视频列表 #}
     <section id="video_list" style="margin-top: 0px">
-        <div class="video_main_box">
-            {% for video in video_list %}
-                <div class="video_box">
-                    <a href=" {{ url_for('video.detail',vid=video["video_id"]) }}" style="text-decoration: none">
-                        <img src="{{ video["video_image"] }}" alt="图片"/>
-                        <div>
-                            <span class="video_title">{{ video["video_name"] }}</span>
+      <div class="video_main_box">
+        <div class="video-grid-slider mt-4" uk-slider="finite: true">
+         {% for video in video_list %}
+             <ul class="video_box">
+                <li style="list-style: none;">
+                    <a href=" {{ url_for('video.detail',vid=video["video_id"]) }}" style="text-decoration: none" class="video-post">
+                        <div class="video-post-thumbnail">
+                            {% for j in score %}
+                                {% if video['video_id']==j[0] %}
+                                    <span class="video-post-count">推荐指数:{{ j[1] }}</span>
+                                {% endif %}
+                            {% endfor %}
+                            <span class="video-post-time">{{ video["video_publishedtime"] }}</span>
+                            <span class="play-btn-trigger"></span>
+                            <img src="{{ video["video_image"] }}" alt="图片"/>
                         </div>
-                        <div>
+                        <div class="video-post-content">
+                            <h3> <span class="video_title">{{ video["video_name"] }}</span></h3>
                             <div class="video_up">
                                 <img src="/static/image/UP主.png" alt="UP主" style="width: 20px;height: 20px"/>
                                 <span>{{ video["video_author"] }}</span>
                             </div>
-                            {% for j in score %}
-                                {% if video['video_id']==j[0] %}
-                                <div class="video_counts">
-                                    <span>推荐指数:{{ j[1] }}</span>
-                                </div>
-                                {% endif %}
-                            {% endfor %}
                         </div>
                     </a>
-                </div>
-            {% endfor %}
-            {#  分页显示  #}
+                </li>
+            </ul>
+         {% endfor %}
+            {#分页显示  #}
             <div class="video_page">
                 {{ paginate.links }}
             </div>
         </div>
+      </div>
     </section>
 
+    <!-- For Night mode -->
+    <script>
+        (function (window, document, undefined) {
+            'use strict';
+            if (!('localStorage' in window)) return;
+            var nightMode = localStorage.getItem('gmtNightMode');
+            if (nightMode) {
+                document.documentElement.className += ' night-mode';
+            }
+        })(window, document);
+
+
+        (function (window, document, undefined) {
+
+            'use strict';
+
+            // Feature test
+            if (!('localStorage' in window)) return;
+
+            // Get our newly insert toggle
+            var nightMode = document.querySelector('#night-mode');
+            if (!nightMode) return;
+
+            // When clicked, toggle night mode on or off
+            nightMode.addEventListener('click', function (event) {
+                event.preventDefault();
+                document.documentElement.classList.toggle('night-mode');
+                if (document.documentElement.classList.contains('night-mode')) {
+                    localStorage.setItem('gmtNightMode', true);
+                    return;
+                }
+                localStorage.removeItem('gmtNightMode');
+            }, false);
+
+        })(window, document);
+    </script>
+
+
+    <!-- javaScripts
+                ================================================== -->
+    <script src="../static/assets/js/framework.js"></script>
+    <script src="../static/assets/js/jquery-3.3.1.min.js"></script>
+    <script src="../static/assets/js/simplebar.js"></script>
+    <script src="../static/assets/js/main.js"></script>
 {% endblock %}

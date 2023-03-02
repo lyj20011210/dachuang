@@ -58,9 +58,9 @@ $(function () {
     })
 
     // 评论提交
-    $(".comment_form").submit(function (e) {
+    $(".comment_input").submit(function (e) {
             e.preventDefault();
-            var content = $(".comment_input").val();
+            var content = $("#comment_input").val();
             var params = {
                 "content": content
             };
@@ -77,25 +77,28 @@ $(function () {
                     }
                     else{
                         alert("评论成功！");
+                        location.reload();
                     }
                 }
+
             })
-        location.reload();
+
     })
 
     // 评论回复
-    $('.comment_list_con').delegate('a,input','click',function(){
+    $('.comment-content').delegate('a,input','click',function(e){
         //获取到点击标签的class属性, reply_sub
         var sHandler = $(this).prop('class');
 
-        if(sHandler.indexOf('comment_reply')>=0)
+        if(sHandler.indexOf('reply')>=0)
         {
-            $(this).next().toggle();
+            $(this).next().next().toggle();
         }
 
         if(sHandler.indexOf('reply_cancel')>=0)
         {
-            $(this).parent().toggle();
+            $(this).parent().parent().parent().toggle();
+            return false
         }
         if(sHandler.indexOf('reply_sub')>=0)
         {
@@ -112,17 +115,18 @@ $(function () {
                 contentType: "application/json",
                 data: JSON.stringify(params_child),
                 success: function (resp) {
-                    if (resp.errno==1){
+                    if (resp.errno===2){
                         alert(resp.errmsg);
-                    }else if (resp.errno==3) {
+                    }else if (resp.errno===3) {
                         alert(resp.errmsg);
                     }
                     else{
                         alert("回复成功！");
+                        location.reload();
                     }
                 }
             })
-            location.reload();
+        return false
         }
     })
 })

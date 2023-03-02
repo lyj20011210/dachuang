@@ -170,18 +170,6 @@ main {
     padding: 6px;
     float: left;
 }
-.video_title{
-    font-weight: bold;
-    font-family: "微软雅黑";
-    font-size: 20px;
-    /* 文本超出显示成... */
-    text-overflow: ellipsis;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    /* 设置可显示的行数 */
-    -webkit-line-clamp: 2;
-    overflow: hidden;
-}
 .video_up{
     font-family:"微软雅黑";
     font-size: 12px;

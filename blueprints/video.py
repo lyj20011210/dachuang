@@ -1,3 +1,4 @@
+import re
 from decimal import Decimal
 
 from flask import Blueprint, render_template, session, request, redirect, url_for, flash, jsonify
@@ -57,8 +58,7 @@ def index(page):
         n = 0
         for i in ScoreMatrix:
             i[1] = Decimal(str(round(i[1], 4))) * 100
-            # print(i)
-        # print("videolist:", videolist)
+
         user = session.get("name")
         total = len(videolist)
         # 每页记录行数定为9
@@ -74,30 +74,46 @@ def index(page):
 
 
 # 搜索功能
-@bp.route('/search/<int:page>/')
-def search(page=1):
-    user = session.get("name")
-    search_content = request.args["search_content"]
-    sql = "select * from video_list where  video_name like '%{}%'".format(search_content)
-    videolist = list(db.session.execute(sql))
-    total = len(videolist)
-    # 每页记录行数定为9
-    limit = 9
-    # 判断当前行和偏移量
-    offset = (9 * int(page) - 9)
-    videolist = videolist[offset:offset + limit:1]
-    # 获取分页代码
-    paginate = Pagination(page=page, total=total, per_page=9)
-    return render_template("search.html", user=user, video_list=videolist,paginate=paginate)
+@bp.route('/search')
+def search():
+    if session.get("name") is None:
+        user = session.get("name")
+        if user is None:
+            user = "未登录"
+        search_content = request.args["search_content"]
+        sql = "select * from video_list where  video_name like '%{}%'".format(search_content)
+        videolist = list(db.session.execute(sql))
+        return render_template("search.html", user=user, video_list=videolist)
+    else:
+        # w = fun.similarity()
+        # print(w)
+        ScoreMatrix = fun.getScoreMatrix()  # 此变量是已经经过余弦相似度得到的评分矩阵，甚至已经排序好了
+        video_id_list = []
+        for i in ScoreMatrix:
+            video_id_list.append(int(i[0]))  # 把已经排序好的评分矩阵
+        videolist = []
+        for i in video_id_list:
+            j = str(i)
+            sql = "select * from video_list where video_id=" + j
+            k = db.session.execute(sql)
+            k = list(k)
+            k = k[0]
+            videolist.append(k)
+        n = 0
+        for i in ScoreMatrix:
+            i[1] = Decimal(str(round(i[1], 4))) * 100
+
+        user = session.get("name")
+        search_content = request.args["search_content"]
+        sql = "select * from video_list where  video_name like '%{}%'".format(search_content)
+        videolist = list(db.session.execute(sql))
+        return render_template("search.html", user=user, video_list=videolist, score=ScoreMatrix)
 
 
 # 转到视频播放页面
-@bp.route("/detail")
-def detail():
-    user = session.get("name")
-    vid = request.args.get("vid")
+@bp.route("/detail/<string:vid>")
+def detail(vid):
     session['vid'] = vid
-
     video_item = list(db.session.execute("select * from video_list where video_id=" + vid))
     sql = "select * from giveVideoScore"
     scorelist = db.session.execute(sql)
@@ -114,9 +130,55 @@ def detail():
     comment_item = list(db.session.execute("select * from comment_list where video_id=" + str(vid)))
     comment_child_item = list(db.session.execute("select * from comment_child_list"))
     length = len(comment_item)
-    data = {"video_item": video_item, "comment_item": comment_item, "comment_child_item": comment_child_item,
-            "length": length}
-    return render_template("detail.html", user=user, score=score, data=data)
+
+    # 获取同类型视频
+    videotag_str = str((db.session.execute("select video_tag from video_list where video_id=" + str(vid))).all())
+    start_index = videotag_str.index("(")
+    end_index = videotag_str.index(")")
+    videotag=videotag_str[start_index+1:end_index-1]
+    videotag = re.sub(r"'", "", videotag)
+    videotag_list = videotag.split("/")
+
+    print("videotag_str:" + videotag_str)
+
+    print("videotag:"+videotag)
+    print(type(videotag))
+
+    print("videotag_list:" + str(videotag_list))
+    print(type(videotag_list))
+    for x in videotag_list:
+        same_video_item = list(db.session.execute("select * from video_list where  video_tag like "+'{}'.format("'%"+x+"%'")))
+        same_video_item.extend(same_video_item)
+        same_video_item=list(set(same_video_item))
+    print("same_video_item:" + str(same_video_item))
+    # 获取评分矩阵
+    user = session.get("name")
+    if user is None:
+        user = "未登录"
+        data = {"video_item": video_item, "comment_item": comment_item, "comment_child_item": comment_child_item,
+                "length": length, "same_video_item": same_video_item}
+        return render_template("detail.html", user=user, score=score, data=data)
+    else:
+        # w = fun.similarity()
+        # print(w)
+        ScoreMatrix = fun.getScoreMatrix()  # 此变量是已经经过余弦相似度得到的评分矩阵，甚至已经排序好了
+        video_id_list = []
+        for i in ScoreMatrix:
+            video_id_list.append(int(i[0]))  # 把已经排序好的评分矩阵
+        videolist = []
+        for i in video_id_list:
+            j = str(i)
+            sql = "select * from video_list where video_id=" + j
+            k = db.session.execute(sql)
+            k = list(k)
+            k = k[0]
+            videolist.append(k)
+        n = 0
+        for i in ScoreMatrix:
+            i[1] = Decimal(str(round(i[1], 4))) * 100
+        data = {"video_item": video_item, "comment_item": comment_item, "comment_child_item": comment_child_item,
+                "length": length, "same_video_item": same_video_item, "score": ScoreMatrix}
+        return render_template("detail.html", user=user, score=score, data=data)
 
 
 @bp.route("/score", methods=['GET', 'POST'])
@@ -158,9 +220,9 @@ def news_comment():
 
     # 获取参数
     video_id = session.get('vid')
-    content = request.json.get('content')
+    content = str(request.json.get('content'))
     parent_id = str(request.json.get('parent_id'))
-    content_child = request.json.get('content_child')
+    content_child = str(request.json.get('content_child'))
     has_child = 0
 
     if not all([content, content_child]):
@@ -192,4 +254,4 @@ def news_comment():
         except Exception as e:
             print("评论失败!")
 
-    return redirect(url_for('video.detail'))
+    return redirect(url_for('video.detail', vid=video_id))

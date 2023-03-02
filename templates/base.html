@@ -62,7 +62,7 @@
      {#点击开始搜索,触发事件#}
         $('#do_search').click(function () {
             var search_content = $('#search_content').val();
-            window.location.href = '{{ url_for('video.search',page=1) }}?search_content=' + search_content+'&number='+Math.random();
+            window.location.href = '{{ url_for('video.search') }}?search_content=' + search_content+'&number='+Math.random();
         });
 </script>
 
