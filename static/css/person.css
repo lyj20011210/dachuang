@@ -106,8 +106,9 @@ main {
     height: 100%;
     line-height: 100%;
     color: #426696;
-    font-size: 14px;
+    font-size: 18px;
     font-weight: 700;
+    text-decoration:none;
 }
 .main_left div:hover {
     background-color: rgba(255, 255, 255, 0.4);
@@ -164,8 +165,9 @@ main {
     width:850px;
     margin:0 auto;
 }
-.video_box{
-    width:280px;
+
+.video_box {
+    width: 270px;
     height: 240px;
     padding: 6px;
     float: left;
@@ -240,6 +242,46 @@ main {
     font-weight:bold;
     font-style:italic;
 }
+
+.checkboxLabel {
+    width: auto;
+    height: auto;
+    color: #fff;
+    background: orange;
+    line-height: 26px;
+    text-align: center;
+    border-radius: 4px;
+    font-size: 30px;
+    margin-left: 10px;
+    cursor: pointer;
+    display: inline-block;
+    margin-top: 20px;
+    padding: 10px;
+}
+
+/*#checkBoxInput{*/
+/*    !*visibility: hidden;*!*/
+/*}*/
+
+/*#checkBoxInput:checked+label{*/
+/*    background: #0e6dcd;*/
+/*}*/
+
+.interest_title {
+	font-size:24px;/*字体大小*/
+font-weight:bold;/*设置文本粗细*/
+background-color: #ffffff;/*背景颜色*/
+border-bottom: 1px solid;/*边框宽度 *颜色定义*/
+padding: 5px 15px;/*宽高*/
+border-left: 8px solid;/*定位*/
+margin:18px 0px 18px -20px;/*定位*/
+overflow: hidden;/*溢出修剪*/
+box-shadow:2px 6px 10px #5F9EA0;/*设置块阴影  水平位移   垂直位移 	模糊半径 */
+}
+
+
+
+
 
 
 

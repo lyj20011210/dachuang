@@ -135,21 +135,22 @@ def detail(vid):
     videotag_str = str((db.session.execute("select video_tag from video_list where video_id=" + str(vid))).all())
     start_index = videotag_str.index("(")
     end_index = videotag_str.index(")")
-    videotag=videotag_str[start_index+1:end_index-1]
+    videotag = videotag_str[start_index + 1:end_index - 1]
     videotag = re.sub(r"'", "", videotag)
     videotag_list = videotag.split("/")
 
     print("videotag_str:" + videotag_str)
 
-    print("videotag:"+videotag)
+    print("videotag:" + videotag)
     print(type(videotag))
 
     print("videotag_list:" + str(videotag_list))
     print(type(videotag_list))
     for x in videotag_list:
-        same_video_item = list(db.session.execute("select * from video_list where  video_tag like "+'{}'.format("'%"+x+"%'")))
+        same_video_item = list(
+            db.session.execute("select * from video_list where  video_tag like " + '{}'.format("'%" + x + "%'")))
         same_video_item.extend(same_video_item)
-        same_video_item=list(set(same_video_item))
+        same_video_item = list(set(same_video_item))
     print("same_video_item:" + str(same_video_item))
     # 获取评分矩阵
     user = session.get("name")
@@ -255,3 +256,36 @@ def news_comment():
             print("评论失败!")
 
     return redirect(url_for('video.detail', vid=video_id))
+
+
+@bp.route("/collects", methods=['GET', 'POST'])
+def collects():
+    collect = request.args.get('flag_c')
+    username = session.get("name")
+    vid = session.get('vid')
+    vid = int(vid)
+    sql = "select * from user_collects "
+    flag = db.session.execute(sql)
+    flag = list(flag)
+    if username is None:
+        return jsonify(errno=1, errmsg='登录后才能收藏哦!')
+    for i in flag:
+        if i[1] == username:
+            if i[2] == vid:
+                if i[3] == collect:
+                    return jsonify(errno=2, errmsg='已经在收藏夹!')
+                sql = "update user_collects set isCollected=" + collect + " where user='" + username + "' and videoid=" + str(
+                    vid)
+                # print(sql)
+                db.session.execute(sql)
+                db.session.commit()
+                return jsonify(errno=0, errmsg='成功')
+    sql = "insert into user_collects(user, videoid, isCollected) values('" + username + "'," + str(
+        vid) + "," + collect + ")"
+    # print(sql)
+    db.session.execute(sql)
+    db.session.commit()
+    return redirect(url_for('video.detail'), flag=flag)
+
+
+

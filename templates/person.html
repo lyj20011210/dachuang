@@ -13,10 +13,18 @@
         <div style="background: white" class="section sec1" id="section1">
             <main style="">
                 <div class="main_left">
-                    <div class="myPhoto current" onclick="isHidden('div1')">
+                    <div class="myPhoto current">
+                        <a style="border: 1px solid blue; border-radius: 30px">
+{#                            <img src="../static/img/img.jpg" alt="" id="head_pic"/>#}
+
+                            <h3 >昵称：{{ name }}</h3>
+{#                            <span style="size: 32px">昵称</span><span style="size: 24px">{{ name }}</span>#}
+                        </a>
+                    </div>
+                    <div onclick="isHidden('div1')">
                         <a href="#" >
-                            <img src="../static/img/img.jpg" alt=""/>
-                            <h3>{{ name }}</h3>
+                            <p></p>
+                            <span>兴趣爱好</span>
                         </a>
                     </div>
                     <div onclick="isHidden('div2')">
@@ -53,7 +61,7 @@
                 <div class="main_right">
                     <div class="content user_hidden" style="display: block" id="div1">
                         <div>
-                            <p>我感兴趣的标签</p>
+                            <p class="interest_title">我感兴趣的标签</p>
                             <div style="margin: 0 auto;position: relative">
                                 {% for i in showtap %}
                                     <label style="width:auto;height:auto;color:#fff;background:orange;line-height: 26px;text-align: center;border-radius: 4px;font-size:30px;margin-left: 10px;cursor: pointer;display: inline-block;margin-top: 20px;padding: 10px;">
@@ -67,10 +75,13 @@
                         <form action="{{ url_for('person.enter') }}" method="post">
                             <div>
                                 {% for i in taplist %}
-                                    <label style="width:auto;height:auto;color:#fff;background:orange;line-height: 26px;text-align: center;border-radius: 4px;font-size:30px;margin-left: 10px;cursor: pointer;display: inline-block;margin-top: 20px;padding: 10px;">
+
+
+                                    <label class="checkboxLabel" >
                                         {{ i }}
+                                        <input name="tap" value={{ i }} type="checkbox" id="checkBoxInput">
                                     </label>
-                                    <input name="tap" value={{ i }} type="checkbox">
+
                                 {% endfor %}
                                 {#                            <label>#}
                                 {#                                计算机#}
@@ -97,11 +108,11 @@
                         {#                            </div>#}
                     </div>
 
-                    <div class="content user_hidden" id="div3" style="overflow-y: auto">
+                    <div class="content user_hidden" id="div3" style="overflow-y: auto; overflow-x: hidden !important; " >
                         <section id="video_list" style="margin-top: 0px">
                             <div class="video_main_box" >
                                 {% for video in collects %}
-                                    <div class="video_box">
+                                    <div class="video_box" style="border: 1px solid blue; border-radius: 20px">
                                         <a href=" {{ url_for('video.detail',vid=video["video_id"]) }}" style="text-decoration: none">
                                             <img src="{{ video["video_image"] }}" alt="图片"/>
                                             <div>

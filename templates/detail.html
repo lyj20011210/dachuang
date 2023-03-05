@@ -9,7 +9,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
-    <meta name="referrer" content="no-referrer" />
+    <meta name="referrer" content="no-referrer"/>
     <link rel="icon" href="../static/assets/images/favicon.png">
 
     <!-- CSS
@@ -27,223 +27,243 @@
 <h>视频详情介绍</h>
 {% block body %}
     {#视频栏#}
-{% for video in data.video_item %}
-    <!-- Wrapper -->
-    <div id="wrapper" class="sidebar-out">
-        <!-- contents -->
-        <div class="main_content content-expand">
-            <div class="main_content_inner">
-                <div uk-grid>
-                    <div class="uk-width-2-3@m">
-                        <div id="video-box" uk-sticky="top: 400 ;media : @s"
-                            cls-active="video-resized uk-animation-slide-right;">
+    {% for video in data.video_item %}
+        <!-- Wrapper -->
+        <div id="wrapper" class="sidebar-out">
+            <!-- contents -->
+            <div class="main_content content-expand">
+                <div class="main_content_inner">
+                    <div uk-grid>
+                        <div class="uk-width-2-3@m">
+                            <div id="video-box" uk-sticky="top: 400 ;media : @s"
+                                 cls-active="video-resized uk-animation-slide-right;">
                             <span class="icon-feather-x btn-box-close"
-                                uk-toggle="target: #video-box ; cls: video-resized-hedden uk-animation-slide-left"></span>
+                                  uk-toggle="target: #video-box ; cls: video-resized-hedden uk-animation-slide-left"></span>
 
-                            <div class="embed-video">
-                                <iframe src="{{ video["video_link"] }}"
-                                scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"
-                                sandbox="allow-top-navigation allow-same-origin allow-forms allow-scripts">
-                                </iframe>
-                            </div>
-                        </div>
-
-                        <div class="video-info mt-3">
-                            <!-- video title -->
-                            <div class="video-info-title">
-                                <h1> {{ video["video_name"] }} </h1>
-                            </div>
-                            <div class="uk-flex uk-flex-between">
-
-                                <div class="video-info-details">
-                                    <span>👁‍播放量：{{ video["video_view"] }}&nbsp;&nbsp; </span>
-                                    <span>💬评论量：{{ video["video_comment"] }} &nbsp;&nbsp;</span>
-                                    <span>💖点赞量：{{ video["video_like"] }} </span>
-                                </div>
-                                <div class="video-likes">
-                                    <div class="like-btn" uk-tooltip="I like it">
-                                        <i class="uil-thumbs-up"></i>
-                                        <span class="likes">21</span>
-                                    </div>
-                                    <div class="video-info-element">
-                                        <div class="views-bar"></div>
-                                        <div class="views-bar blue" style="width: 40%"></div>
-                                    </div>
-                                    <div class="like-btn" uk-tooltip="I Hate it">
-                                        <i class="uil-thumbs-down"></i>
-                                        <span class="likes">14</span>
-                                    </div>
+                                <div class="embed-video">
+                                    <iframe src="{{ video["video_link"] }}"
+                                            scrolling="no" border="0" frameborder="no" framespacing="0"
+                                            allowfullscreen="true"
+                                            sandbox="allow-top-navigation allow-same-origin allow-forms allow-scripts">
+                                    </iframe>
                                 </div>
                             </div>
 
-                            <div class="uk-flex uk-flex-between uk-flex-middle" uk-grid>
-                                <div class="user-details-card uk-width-expand">
-                                    <a href="#" class="uk-flex">
-                                        <div class="user-details-card-avatar">
-                                            <img src="../static/image/penguin.png" alt="">
+                            <div class="video-info mt-3">
+                                <!-- video title -->
+                                <div class="video-info-title">
+                                    <h1> {{ video["video_name"] }} </h1>
+                                </div>
+                                <div class="uk-flex uk-flex-between">
+
+                                    <div class="video-info-details">
+                                        <span>👁‍播放量：{{ video["video_view"] }}&nbsp;&nbsp; </span>
+                                        <span>💬评论量：{{ video["video_comment"] }} &nbsp;&nbsp;</span>
+                                        <span>💖点赞量：{{ video["video_like"] }} </span>
+                                        {#收藏按钮#}
+                                        <button type="button" class="btn btn-collect" id="btn_collect">
+                                                <span class="glyphicon glyphicon-star-empty" id="btn_collect_icon"
+                                                      aria-hidden="true"></span>收藏
+                                        </button>
+                                    </div>
+                                    <div class="video-likes">
+                                        <div class="like-btn" uk-tooltip="I like it">
+                                            <i class="uil-thumbs-up"></i>
+                                            <span class="likes">21</span>
                                         </div>
-                                        <div class="user-details-card-name">
-                                            {{ video["video_author"] }} <span> 发布于{{ video["video_publishedtime"] }} </span>
+                                        <div class="video-info-element">
+                                            <div class="views-bar"></div>
+                                            <div class="views-bar blue" style="width: 40%"></div>
                                         </div>
-                                    </a>
-                                </div>
-                                <div class="uk-width-auto uk-flex">
-                                    <div class="btn-subscribe">
-                                        <a href="#" class="button danger"> <i class="icon-feather-plus"></i>
-                                            subscribe </a>
-                                        <span class="subs-amount">1200</span>
+                                        <div class="like-btn" uk-tooltip="I Hate it">
+                                            <i class="uil-thumbs-down"></i>
+                                            <span class="likes">14</span>
+                                        </div>
                                     </div>
+                                </div>
 
+                                <div class="uk-flex uk-flex-between uk-flex-middle" uk-grid>
+                                    <div class="user-details-card uk-width-expand">
+                                        <a href="#" class="uk-flex">
+                                            <div class="user-details-card-avatar">
+                                                <img src="../static/image/penguin.png" alt="">
+                                            </div>
+                                            <div class="user-details-card-name">
+                                                {{ video["video_author"] }}
+                                                <span> 发布于{{ video["video_publishedtime"] }} </span>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <div class="uk-width-auto uk-flex">
+                                        <div class="btn-subscribe">
+                                            <a href="#" class="button danger"> <i class="icon-feather-plus"></i>
+                                                subscribe </a>
+                                            <span class="subs-amount">1200</span>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <hr class="mt-0 mb-2">
+
+                                <h2>详情</h2>
+                                <div class="about-ch-sec mb-lg-6">
+                                    <div class="abt-rw">
+                                        <h4>👉介绍: </h4>
+                                        <p>{{ video["video_introduce"] }} </p>
+                                    </div>
+                                    <div class="abt-rw">
+                                        <h4>👉标签: </h4>
+                                        <ul>
+                                            <li><span>{{ video["video_tag"] }}</span></li>
+                                        </ul>
+                                    </div>
+                                    <div class="abt-rw tgs">
+                                        <h4>👉我的评分: </h4>
+                                        <p>{{ score }} </p>
+                                    </div>
                                 </div>
                             </div>
-                            <hr class="mt-0 mb-2">
-
-                            <h2>详情</h2>
-                            <div class="about-ch-sec mb-lg-6">
-                                <div class="abt-rw">
-                                    <h4>👉介绍: </h4>
-                                    <p>{{ video["video_introduce"] }} </p>
+                            <div id="starRating">
+                                <h4>⭐请给视频评分: </h4>
+                                <p class="photo">
+                                    <span><i class="high"></i><i class="nohigh"></i></span>
+                                    <span><i class="high"></i><i class="nohigh"></i></span>
+                                    <span><i class="high"></i><i class="nohigh"></i></span>
+                                    <span><i class="high"></i><i class="nohigh"></i></span>
+                                    <span><i class="high"></i><i class="nohigh"></i></span>
+                                </p>
+                                <p class="starNum">0.0分</p>
+                                <div class="bottoms">
+                                    <a class="garyBtn cancleStar">取消评分</a><a class="blueBtn sureStar">确认</a>
                                 </div>
-                                <div class="abt-rw">
-                                    <h4>👉标签: </h4>
+                            </div>
+                            <hr>
+
+                            <div class="comments">
+                                <h4>📝发表评论 </h4>
+                                <ul>
+                                    <li>
+                                        <div class="avatar"><img src="../static/image/comment.png" alt="">
+                                        </div>
+                                        <div class="comment-content">
+                                            <form class="uk-grid-small  comment_input">
+                                                <div class="uk-width-1-1@s">
+                                                <textarea class="uk-textarea" id="comment_input"
+                                                          placeholder="留下点什么吧..."
+                                                          style="height:150px"></textarea>
+                                                </div>
+                                                <div class="uk-grid-margin">
+                                                    <input type="submit" value="提交" class="button warning">
+                                                </div>
+                                            </form>
+
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="comments mt-4">
+                                <h3> 评论 <span class="comments-amount">{{ data.length }}</span></h3>
+                                {% if video["has_comment"]==0 %}
+                                    <div class="empty_comment">
+                                        <img src="../static/image/empty_comment.png">
+                                        还没有评论哦，快来留下点什么吧！
+                                    </div>
+                                {% endif %}
+                                {# 遍历所有的评论 #}
+                                {% for comment in data.comment_item %}
                                     <ul>
-                                        <li><span>{{ video["video_tag"]}}</span></li>
-                                    </ul>
-                                </div>
-                                <div class="abt-rw tgs">
-                                    <h4>👉我的评分: </h4>
-                                    <p>{{ score }} </p>
-                                </div>
-                            </div>
-                        </div>
-                         <div id="starRating">
-                             <h4>⭐请给视频评分: </h4>
-                            <p class="photo">
-                                <span><i class="high"></i><i class="nohigh"></i></span>
-                                <span><i class="high"></i><i class="nohigh"></i></span>
-                                <span><i class="high"></i><i class="nohigh"></i></span>
-                                <span><i class="high"></i><i class="nohigh"></i></span>
-                                <span><i class="high"></i><i class="nohigh"></i></span>
-                            </p>
-                            <p class="starNum">0.0分</p>
-                            <div class="bottoms">
-                                <a class="garyBtn cancleStar">取消评分</a><a class="blueBtn sureStar">确认</a>
-                            </div>
-                        </div>
-                        <hr>
-
-                        <div class="comments">
-                            <h4>📝发表评论 </h4>
-                            <ul>
-                                <li>
-                                    <div class="avatar"><img src="../static/image/comment.png" alt="">
-                                    </div>
-                                    <div class="comment-content">
-                                        <form class="uk-grid-small  comment_input" >
-                                            <div class="uk-width-1-1@s">
-                                                <textarea class="uk-textarea" id="comment_input" placeholder="留下点什么吧..."
-                                                    style="height:150px"></textarea>
-                                            </div>
-                                            <div class="uk-grid-margin">
-                                                <input type="submit" value="提交" class="button warning">
-                                            </div>
-                                        </form>
-
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-
-                        <div class="comments mt-4">
-                            <h3> 评论 <span class="comments-amount">{{ data.length }}</span> </h3>
-                            {% if video["has_comment"]==0 %}
-                                 <div class="empty_comment">
-                                    <img src="../static/image/empty_comment.png" >
-                                    还没有评论哦，快来留下点什么吧！
-                                 </div>
-                            {% endif %}
-                            {# 遍历所有的评论 #}
-                            {% for comment in data.comment_item %}
-                            <ul>
-                                <li>
-                                    <div class="avatar"><img src="../static/image/girl.png" alt=""></div>
-                                    <div class="comment-content">
-                                        <div class="comment-by">{{ comment["username"] }} <span>{{ comment["comment_time"] }}</span>
-                                             <a href="javascript:" class="reply" id="reply"><i class="icon-line-awesome-undo"></i>回复</a>
-                                             <p> {{ comment["content"] }} </p>
-                                            <div style="display:none;margin-left: 10px">
-                                                <div style="float: left"><img src="../static/image/boy.png" alt=""  style="border-radius:10%;width:60px;height:62px"></div>
-                                                <div class="comment-content">
-                                                    <form class="uk-grid-small" data-comment_id="{{ comment["id"] }}">
+                                    <li>
+                                        <div class="avatar"><img src="../static/image/girl.png" alt=""></div>
+                                        <div class="comment-content">
+                                            <div class="comment-by">{{ comment["username"] }}
+                                                <span>{{ comment["comment_time"] }}</span>
+                                                <a href="javascript:" class="reply" id="reply"><i
+                                                        class="icon-line-awesome-undo"></i>回复</a>
+                                                <p> {{ comment["content"] }} </p>
+                                                <div style="display:none;margin-left: 10px">
+                                                    <div style="float: left"><img src="../static/image/boy.png" alt=""
+                                                                                  style="border-radius:10%;width:60px;height:62px">
+                                                    </div>
+                                                    <div class="comment-content">
+                                                        <form class="uk-grid-small"
+                                                              data-comment_id="{{ comment["id"] }}">
                                                             <textarea class="uk-textarea" placeholder="留下点什么吧..."
-                                                                style="height:150px;margin-bottom: 10px"></textarea>
-                                                            <input type="submit" value="提交" class="button warning reply_sub">
-                                                            <input type="reset" value="取消" class=" button warning reply_cancel">
-                                                    </form>
+                                                                      style="height:150px;margin-bottom: 10px"></textarea>
+                                                            <input type="submit" value="提交"
+                                                                   class="button warning reply_sub">
+                                                            <input type="reset" value="取消"
+                                                                   class=" button warning reply_cancel">
+                                                        </form>
+                                                    </div>
                                                 </div>
                                             </div>
+
+
                                         </div>
 
-
-                                    </div>
-
-                                    {# 判断是否有子评论 #}
-                                    {% if comment["has_child"] %}
-                                        {% for comment_child in data.comment_child_item %}
-                                            {% if comment_child["parent_id"]==comment["id"] %}
-                                                <ul>
-                                                    <li>
-                                                        <div class="avatar"><img src="../static/image/boy.png" alt="">
-                                                        </div>
-                                                        <div class="comment-content">
-                                                            <div class="comment-by">{{ comment_child["username"] }}<span>{{ comment_child["comment_time"] }}</span></div>
-                                                            <p>{{ comment_child["content"] }}</p>
-                                                        </div>
-                                                    </li>
-                                                </ul>
-                                            {% endif %}
-                                        {% endfor %}
-                                    {% endif %}
-                                </li>
-                            {% endfor %}
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div class="uk-width-expand@m">
-                        <div class="uk-flex uk-flex-middle uk-flex-between px-1 pb-3">
-                            <p class="mb-0 uk-h2" style="color: #0a0a0a"> 💟同类型视频推荐 </p>
-                        </div>
-                        <div class="video-list-small uk-child-width-1-1@m uk-child-width-1-2@s" uk-grid>
-                            {% for same_video in data.same_video_item %}
-                            <div style="margin-bottom: 40px;">
-                                <a href=" {{ url_for('video.detail',vid=same_video["video_id"]) }}" style="text-decoration: none" class="video-post  video-post-list">
-                                    <div class="video-post-thumbnail">
-                                        {% for j in data.score %}
-                                            {% if same_video['video_id']==j[0] %}
-                                                <span class="video-post-count">推荐指数:{{ j[1] }}</span>
-                                            {% endif %}
-                                        {% endfor %}
-                                        <span class="video-post-time">{{ same_video["video_publishedtime"] }}</span>
-                                        <span class="play-btn-trigger"></span>
-                                        <img src="{{ same_video["video_image"] }}" alt="图片"/>
-                                    </div>
-                                    <div class="video-post-content">
-                                        <h3> <span class="video_title2">{{ same_video["video_name"] }}</span></h3>
-                                        <div class="video_up">
-                                            <img src="/static/image/UP主.png" alt="UP主" style="width: 20px;height: 20px"/>
-                                            <span>{{ same_video["video_author"] }}</span>
-                                        </div>
-                                    </div>
-                                </a>
+                                        {# 判断是否有子评论 #}
+                                        {% if comment["has_child"] %}
+                                            {% for comment_child in data.comment_child_item %}
+                                                {% if comment_child["parent_id"]==comment["id"] %}
+                                                    <ul>
+                                                        <li>
+                                                            <div class="avatar"><img src="../static/image/boy.png"
+                                                                                     alt="">
+                                                            </div>
+                                                            <div class="comment-content">
+                                                                <div class="comment-by">{{ comment_child["username"] }}<span>{{ comment_child["comment_time"] }}</span>
+                                                                </div>
+                                                                <p>{{ comment_child["content"] }}</p>
+                                                            </div>
+                                                        </li>
+                                                    </ul>
+                                                {% endif %}
+                                            {% endfor %}
+                                        {% endif %}
+                                    </li>
+                                {% endfor %}
+                                </ul>
                             </div>
-                            {% endfor %}
+                        </div>
+
+                        <div class="uk-width-expand@m">
+                            <div class="uk-flex uk-flex-middle uk-flex-between px-1 pb-3">
+                                <p class="mb-0 uk-h2" style="color: #0a0a0a"> 💟同类型视频推荐 </p>
+                            </div>
+                            <div class="video-list-small uk-child-width-1-1@m uk-child-width-1-2@s" uk-grid>
+                                {% for same_video in data.same_video_item %}
+                                    <div style="margin-bottom: 40px;">
+                                        <a href=" {{ url_for('video.detail',vid=same_video["video_id"]) }}"
+                                           style="text-decoration: none" class="video-post  video-post-list">
+                                            <div class="video-post-thumbnail">
+                                                {% for j in data.score %}
+                                                    {% if same_video['video_id']==j[0] %}
+                                                        <span class="video-post-count">推荐指数:{{ j[1] }}</span>
+                                                    {% endif %}
+                                                {% endfor %}
+                                                <span class="video-post-time">{{ same_video["video_publishedtime"] }}</span>
+                                                <span class="play-btn-trigger"></span>
+                                                <img src="{{ same_video["video_image"] }}" alt="图片"/>
+                                            </div>
+                                            <div class="video-post-content">
+                                                <h3><span class="video_title2">{{ same_video["video_name"] }}</span>
+                                                </h3>
+                                                <div class="video_up">
+                                                    <img src="/static/image/UP主.png" alt="UP主"
+                                                         style="width: 20px;height: 20px"/>
+                                                    <span>{{ same_video["video_author"] }}</span>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                {% endfor %}
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
     {% endfor %}
     <!-- For Night mode -->
     <script>
