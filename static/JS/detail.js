@@ -37,7 +37,7 @@ $(function () {
         $('.starNum').html(starRating.toFixed(1) + '分');
     });
     //确定评分
-    
+
     $('.sureStar').on('click', function () {
         if (starRating === 0) {
             alert('最低一颗星！');
@@ -46,7 +46,7 @@ $(function () {
                 type: "GET",
                 url: "http://127.0.0.1:5000/score",
                 dataType: "json",
-                data: {'name':starRating},
+                data: {'name': starRating},
                 success: function (result) {
                     console.log(result)
                     alert("helo")
@@ -59,49 +59,45 @@ $(function () {
 
     // 评论提交
     $(".comment_input").submit(function (e) {
-            e.preventDefault();
-            var content = $("#comment_input").val();
-            var params = {
-                "content": content
-            };
-            $.ajax({
-                url: "/news_comment",
-                type: "post",
-                contentType: "application/json",
-                data: JSON.stringify(params),
-                success: function (resp) {
-                    if (resp.errno==1){
-                        alert(resp.errmsg);
-                    }else if (resp.errno==2) {
-                        alert(resp.errmsg);
-                    }
-                    else{
-                        alert("评论成功！");
-                        location.reload();
-                    }
+        e.preventDefault();
+        var content = $("#comment_input").val();
+        var params = {
+            "content": content
+        };
+        $.ajax({
+            url: "/news_comment",
+            type: "post",
+            contentType: "application/json",
+            data: JSON.stringify(params),
+            success: function (resp) {
+                if (resp.errno == 1) {
+                    alert(resp.errmsg);
+                } else if (resp.errno == 2) {
+                    alert(resp.errmsg);
+                } else {
+                    alert("评论成功！");
+                    location.reload();
                 }
+            }
 
-            })
+        })
 
     })
 
     // 评论回复
-    $('.comment-content').delegate('a,input','click',function(e){
+    $('.comment-content').delegate('a,input', 'click', function (e) {
         //获取到点击标签的class属性, reply_sub
         var sHandler = $(this).prop('class');
 
-        if(sHandler.indexOf('reply')>=0)
-        {
+        if (sHandler.indexOf('reply') >= 0) {
             $(this).next().next().toggle();
         }
 
-        if(sHandler.indexOf('reply_cancel')>=0)
-        {
+        if (sHandler.indexOf('reply_cancel') >= 0) {
             $(this).parent().parent().parent().toggle();
             return false
         }
-        if(sHandler.indexOf('reply_sub')>=0)
-        {
+        if (sHandler.indexOf('reply_sub') >= 0) {
             var $this = $(this)
             var parent_id = $this.parent().attr('data-comment_id')
             var content_child = $this.prev().val()
@@ -115,18 +111,63 @@ $(function () {
                 contentType: "application/json",
                 data: JSON.stringify(params_child),
                 success: function (resp) {
-                    if (resp.errno===2){
+                    if (resp.errno === 2) {
                         alert(resp.errmsg);
-                    }else if (resp.errno===3) {
+                    } else if (resp.errno === 3) {
                         alert(resp.errmsg);
-                    }
-                    else{
+                    } else {
                         alert("回复成功！");
                         location.reload();
                     }
                 }
             })
-        return false
+            return false
         }
     })
+    //收藏
+    $("#btn_collect").click(function () {
+        var classname = $("#btn_collect_icon").attr("class");
+
+        if (classname == "glyphicon glyphicon-star-empty") {
+            var isCollected = 1;
+            $.ajax({
+                type: "GET",
+                url: "http://127.0.0.1:5000/collects",
+                dataType: "json",
+                data: {'flag_c': isCollected},
+                success: function (resp) {
+                    if (resp.errno === 1) {
+                        alert(resp.errmsg);
+                    } else if (resp.errno === 2) {
+                        alert(resp.errmsg);
+                        $("#btn_collect_icon").removeClass("glyphicon-star-empty glyphicon-star");
+                        $("#btn_collect_icon").addClass("glyphicon glyphicon-star");
+                    } else {
+                        $("#btn_collect_icon").removeClass("glyphicon-star-empty glyphicon-star");
+                        $("#btn_collect_icon").addClass("glyphicon glyphicon-star");
+                        // console.log(reps)
+                        alert("收藏成功");
+                    }
+                }
+            })
+        } else {
+            var isCollected = 0;
+            $.ajax({
+                type: "GET",
+                url: "http://127.0.0.1:5000/collects",
+                dataType: "json",
+                data: {'flag_c': isCollected},
+                success: function (resp) {
+                    if (resp.errno === 1) {
+                        alert(resp.errmsg);
+                    } else {
+                        $("#btn_collect_icon").removeClass("glyphicon-star-empty glyphicon-star");
+                        $("#btn_collect_icon").addClass("glyphicon glyphicon-star-empty");
+                        // console.log(resp)
+                        alert("取消收藏");
+                    }
+                }
+            })
+        }
+    });
 })

@@ -80,3 +80,13 @@ def enter():
     db.session.commit()
     return redirect(url_for('person.person'))
 
+
+def iscollected(self, vid, uid):
+    sql = "select * from user_collects "
+    flag = db.session.execute(sql)
+    flag = list(flag)
+    for i in flag:
+        if i[1] == uid:
+            if i[2] == vid:
+                return 1;
+    return 0;

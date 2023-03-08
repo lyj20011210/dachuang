@@ -83,6 +83,52 @@
 }
 
 
+#shouCang .heart span {
+    position: relative;
+    display: inline-block;
+    width: 44px;
+    height: 42px;
+    overflow: hidden;
+    margin-right: 23px;
+    cursor: pointer;
+    margin-top: 30px;
+     /*border: 1px solid black;*/
+}
+
+
+#shouCang .heart span .unGetSc {
+    width:100px;
+    height:36px;
+    color:#666;
+    border-radius:4px;
+    font-size:14px;
+    /*margin:0px 5px;*/
+    background: url(../img/heart.png) center 0px;
+    position:relative;
+    overflow:hidden;
+}
+
+#shouCang .heart span .getSc {
+    width:100px;
+    height:36px;
+    color:#666;
+    border-radius:4px;
+    font-size:14px;
+    /*margin:0px 5px;*/
+    background: url(../img/heart1.png) center 0px;
+    position:relative;
+    overflow:hidden;
+}
+
+#shouCang .getSc {
+    /*margin-top: 30px;*/
+}
+
+
+
+
+
+
 
 .fl{
 	float:left;
@@ -242,3 +288,14 @@
     border:1px solid #2185ed;
 }
 
+.btn-collect{
+    margin-left: 30px;
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+
+}
+
+.btn-collect:hover {
+    background-color: red; /* Red */
+    color: white;
+}
