@@ -1,0 +1,121 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>Neovis.js Simple Example</title>
+    <style type="text/css">
+        html,
+        body {
+            font: 16pt arial;
+        }
+
+        #viz {
+            width: 900px;
+            height: 700px;
+            border: 1px solid lightgray;
+            font: 22pt arial;
+        }
+    </style>
+
+    <script type="text/javascript" src="../static/assets/dist/neovis.js"></script>
+
+
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+
+    <script type="text/javascript">
+        // define config car
+        // instantiate nodevis object
+        // draw
+        var viz;
+        var str = "MATCH (c:Lable{name:'{{data}}'})<-[r*0..]-(result) return result,r";
+
+        function draw() {
+            var config = {
+                containerId: "viz",
+                neo4j: {
+                    serverUrl: "neo4j://819f108b.databases.neo4j.io:7687",
+                    serverUser: "neo4j",
+                    serverPassword: "12345678",
+                    driverConfig: {
+                        encrypted: "ENCRYPTION_ON",
+                        trust: "TRUST_SYSTEM_CA_SIGNED_CERTIFICATES"
+                    }
+                },
+                visConfig: {
+                    layout: {
+                        randomSeed: undefined,
+                        improvedLayout: true,
+                        clusterThreshold: 150,
+                        hierarchical: {
+                            enabled: true,
+                            levelSeparation: 300,
+                            nodeSpacing: 200,
+                            blockShifting: true,
+                            edgeMinimization: true,
+                            parentCentralization: true,
+                            direction: 'LR',        // UD, DU, LR, RL
+                            sortMethod: 'directed',  // hubsize, directed
+                            shakeTowards: 'roots'  // roots, leaves
+                        }
+                    },
+                    edges: {
+                        arrows: "to",
+                    }
+                },
+                labels: {
+                    "Lable": {
+                        label: "name",
+                    }
+                },
+                relationships: {
+                    "base": {
+                        "thinkness": 1,
+                        "caption": false
+                    }
+                },
+                initialCypher: str,
+            };
+
+            viz = new NeoVis.default(config);
+            viz.render();
+            console.log(viz);
+            viz.registerOnEvent('clickNode', (e) => {
+                // e: { nodeId: number; node: Node }
+                console.info(e.node.raw.properties);
+            });
+
+         }
+    </script>
+</head>
+
+<body onload="draw()">
+<div style="height: 500px;width: 80%;" id="viz"></div>
+{% for i in showtap %}
+    <label style="width:auto;height:auto;color:#fff;background:orange;line-height: 26px;text-align: center;border-radius: 4px;font-size:30px;margin-left: 10px;cursor: pointer;display: inline-block;margin-top: 20px;padding: 10px;">
+        {{ i }}
+    </label>
+{% endfor %}
+</body>
+
+<script>
+    $("#reload").click(function () {
+
+        var cypher = $("#cypher").val();
+
+        if (cypher.length > 3) {
+            viz.renderWithCypher(cypher);
+        } else {
+            console.log("reload");
+            viz.reload();
+
+        }
+
+    });
+
+    $("#stabilize").click(function () {
+        viz.stabilize();
+    })
+
+</script>
+
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script>
+        function selchk(thisValue)  //selchk为 checkbox控件，   前台每个checkbox控件都需加上这方法
+        {
+            {#var selectLen = document.myForm.tap.length;#}
+            {#for (j = 0; j < selectLen; j++) {#}
+            {#    if (eval("document.myForm.tap[" + j + "].checked") == true) {#}
+            {#        document.myForm.tap[j].checked = false;#}
+            {#        if (document.myForm.tap[j].value == thisValue) {#}
+            {#            document.myForm.tap[j].checked = true;#}
+            {#        }#}
+            {#    }#}
+            {# }#}
+        }
+
+    </script>
+</head>
+<body>
+<form name="myForm" action="{{ url_for('map.mapindex') }}" method="post">
+    <div>
+        {% for i in taplist %}
+            <label onclick="selchk(this.value)" style="width:auto;height:auto;color:#fff;background:orange;line-height: 26px;text-align: center;border-radius: 4px;font-size:30px;margin-left: 10px;cursor: pointer;display: inline-block;margin-top: 20px;padding: 10px;">
+                {{ i }}
+            </label>
+            <input name="tap" value={{ i }} type="checkbox">
+        {% endfor %}
+        <button type="submit" class="btn btn-default">提交</button>
+    </div>
+</form>
+</body>
+</html>
