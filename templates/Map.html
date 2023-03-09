@@ -1,12 +1,31 @@
-<!doctype html>
-<html>
+{% extends "base.html" %}
+{% block title %}个人中心
+{% endblock %}
+{% block head %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/video.css') }}">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <!-- CSS
+    ================================================== -->
+    <link rel="stylesheet" href="../static/assets/css/style.css">
+    <link rel="stylesheet" href="../static/assets/css/night-mode.css">
+    <link rel="stylesheet" href="../static/assets/css/framework.css">
 
-<head>
-    <title>Neovis.js Simple Example</title>
+    <!-- icons
+    ================================================== -->
+    <link rel="stylesheet" href="../static/assets/css/icons.css">
+
+    <!-- Google font
+    ================================================== -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
+
+    <meta name="referrer" content="no-referrer">
+
     <style type="text/css">
         html,
         body {
-            font: 16pt arial;
+
         }
 
         #viz {
@@ -27,7 +46,8 @@
         // instantiate nodevis object
         // draw
         var viz;
-        var str = "MATCH (c:Lable{name:'{{data}}'})<-[r*0..]-(result) return result,r";
+        var str = {{ cql  | tojson}};
+        console.log(str)
 
         function draw() {
             var config = {
@@ -81,41 +101,47 @@
             console.log(viz);
             viz.registerOnEvent('clickNode', (e) => {
                 // e: { nodeId: number; node: Node }
-                console.info(e.node.raw.properties);
-            });
-
-         }
-    </script>
-</head>
-
-<body onload="draw()">
-<div style="height: 500px;width: 80%;" id="viz"></div>
-{% for i in showtap %}
-    <label style="width:auto;height:auto;color:#fff;background:orange;line-height: 26px;text-align: center;border-radius: 4px;font-size:30px;margin-left: 10px;cursor: pointer;display: inline-block;margin-top: 20px;padding: 10px;">
-        {{ i }}
-    </label>
-{% endfor %}
-</body>
-
-<script>
-    $("#reload").click(function () {
-
-        var cypher = $("#cypher").val();
-
-        if (cypher.length > 3) {
-            viz.renderWithCypher(cypher);
-        } else {
-            console.log("reload");
-            viz.reload();
+                window.location.replace("{{ url_for("map.select") }}"+"?tap="+e.node.label);
+                console.info(e.node.label);
+             });
 
         }
+    </script>
 
-    });
+{% endblock %}
 
-    $("#stabilize").click(function () {
-        viz.stabilize();
-    })
 
-</script>
+{% block body %}
+    <body onload="draw()">
+    <a href="{{ url_for('map.enter') }}">选择标签</a>
+    <div>当前的标签为：{{ current }}</div>
+    <div style="margin: auto;height: 500px;width: 80%;" id="viz"></div>
+    {% for video in videolist %}
+        <ul class="video_box">
+            <li style="list-style: none;">
+                <a href=" {{ url_for('video.detail',vid=video["video_id"]) }}" style="text-decoration: none"
+                   class="video-post">
+                    <div class="video-post-thumbnail">
+                        {% for j in score %}
+                            {% if video['video_id']==j[0] %}
+                                <span class="video-post-count">推荐指数:{{ j[1] }}</span>
+                            {% endif %}
+                        {% endfor %}
+                        <span class="video-post-time">{{ video["video_publishedtime"] }}</span>
+                        <span class="play-btn-trigger"></span>
+                        <img src="{{ video["video_image"] }}" alt="图片"/>
+                    </div>
+                    <div class="video-post-content">
+                        <h3><span class="video_title">{{ video["video_name"] }}</span></h3>
+                        <div class="video_up">
+                            <img src="/static/image/UP主.png" alt="UP主" style="width: 20px;height: 20px"/>
+                            <span>{{ video["video_author"] }}</span>
+                        </div>
+                    </div>
+                </a>
+            </li>
+        </ul>
+    {% endfor %}
 
-</html>
+    </body>
+{% endblock %}

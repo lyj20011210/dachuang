@@ -4,6 +4,14 @@ from scipy import spatial
 import numpy as np
 from exts import db
 
+#此函数用于取特定标签的视频
+def selectVideoWithLabel(label:str):
+    s="select * from video_list where video_tag like '"+label+"'"
+    print(s)
+    video=db.session.execute(s)
+    return video
+
+
 
 def like(user, video):
     # 求余弦相似度算法
