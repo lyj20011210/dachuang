@@ -36,39 +36,41 @@
 
     {# 视频列表 #}
     <section id="video_list" style="margin-top: 0px">
-      <div class="video_main_box">
-        <div class="video-grid-slider mt-4" uk-slider="finite: true">
-         {% for video in video_list %}
-             <ul class="video_box">
-                <li style="list-style: none;">
-                    <a href=" {{ url_for('video.detail',vid=video["video_id"]) }}" style="text-decoration: none" class="video-post">
-                        <div class="video-post-thumbnail">
-                            {% for j in score %}
-                                {% if video['video_id']==j[0] %}
-                                    <span class="video-post-count">推荐指数:{{ j[1] }}</span>
-                                {% endif %}
-                            {% endfor %}
-                            <span class="video-post-time">{{ video["video_publishedtime"] }}</span>
-                            <span class="play-btn-trigger"></span>
-                            <img src="{{ video["video_image"] }}" alt="图片"/>
-                        </div>
-                        <div class="video-post-content">
-                            <h3> <span class="video_title">{{ video["video_name"] }}</span></h3>
-                            <div class="video_up">
-                                <img src="/static/image/UP主.png" alt="UP主" style="width: 20px;height: 20px"/>
-                                <span>{{ video["video_author"] }}</span>
-                            </div>
-                        </div>
-                    </a>
-                </li>
-            </ul>
-         {% endfor %}
-            {#分页显示  #}
-            <div class="video_page">
-                {{ paginate.links }}
+        <div class="video_main_box">
+            <div class="video-grid-slider mt-4" uk-slider="finite: true">
+
+                {% for video in video_list %}
+                    <ul class="video_box">
+                        <li style="list-style: none;">
+                            <a href=" {{ url_for('video.detail',vid=video["video_id"]) }}" style="text-decoration: none"
+                               class="video-post">
+                                <div class="video-post-thumbnail">
+                                    {% for j in score %}
+                                        {% if video['video_id']==j[0] %}
+                                            <span class="video-post-count">推荐指数:{{ j[1] }}</span>
+                                        {% endif %}
+                                    {% endfor %}
+                                    <span class="video-post-time">{{ video["video_publishedtime"] }}</span>
+                                    <span class="play-btn-trigger"></span>
+                                    <img src="{{ video["video_image"] }}" alt="图片"/>
+                                </div>
+                                <div class="video-post-content">
+                                    <h3><span class="video_title">{{ video["video_name"] }}</span></h3>
+                                    <div class="video_up">
+                                        <img src="/static/image/UP主.png" alt="UP主" style="width: 20px;height: 20px"/>
+                                        <span>{{ video["video_author"] }}</span>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                {% endfor %}
+                {#分页显示  #}
+                <div class="video_page">
+                    {{ paginate.links }}
+                </div>
             </div>
         </div>
-      </div>
     </section>
 
     <!-- For Night mode -->

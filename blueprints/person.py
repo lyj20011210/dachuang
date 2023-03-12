@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, redirect, request, jsonify, curren
 
 from Models import Videos_List
 from exts import db
-
+import funtion as fun
 from exts import mail
 from flask_mail import Message
 
@@ -78,6 +78,7 @@ def enter():
         s = "update user_interest set " + i + " = 1 where user_name = '" + session.get("name") + "'"
         db.session.execute(s)
     db.session.commit()
+    fun.putScoreMatrixintoDatabase()
     return redirect(url_for('person.person'))
 
 

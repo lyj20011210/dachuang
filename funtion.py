@@ -1,20 +1,25 @@
 # 此文件为功能函数
+import datetime
+
+import scipy.sparse
 from flask import session
 from scipy import spatial
 import numpy as np
 from exts import db
 
-#此函数用于取特定标签的视频
-def selectVideoWithLabel(label:str):
-    s="select * from video_list where video_tag like '"+label+"'"
-    print(s)
-    video=db.session.execute(s)
-    return video
 
+# 此函数用于取特定标签的视频
+def selectVideoWithLabel(label: str):
+    s = "select * from video_list where video_tag like '" + label + "'"
+    print(s)
+    video = db.session.execute(s)
+    return video
 
 
 def like(user, video):
     # 求余弦相似度算法
+    # user = scipy.sparse.csr_matrix(user)
+    # video = scipy.sparse.csr_matrix(video)
     sql = "select count(*) from label"
     num = db.session.execute(sql)
     num = int(list(num)[0][0])
@@ -43,7 +48,7 @@ def count():
 
     a = usertag[0]  # a是提取出人物的标签信息
     uscore = a[2:]  # 得到人物标签矩阵
-    # print(uscore)
+    print(uscore)
     n = 0
     d = np.zeros((num, 2))  # d用于储存视频标签以及其对应的分数
 
@@ -57,10 +62,42 @@ def count():
     return d
 
 
-def getScoreMatrix():
-    userbaseMatrix = user_based_recommend()
-    ScoreMatrix = count()  # score-matrix是最终算出来的评分矩阵,后续评分的处理都该放入score-matrix中
+# 为了优化首页的访问速度，我新建了一个表格，用于存储用户的视频评分矩阵
+def putScoreMatrixintoDatabase():
+    time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    print("start " + time)
+    print("1")
+    name = session.get("name")
+    ScoreMatrix = count()
+    print("ScoreM")
     ScoreMatrix = sorted(ScoreMatrix, key=(lambda x: x[1]), reverse=True)
+    print(ScoreMatrix)
+    for i in ScoreMatrix:
+        # sql="select exists (select * from ScoreMatrix where name= '"+name+"' and videoid= "+str(int(i[0]))+")"
+        # res=db.session.execute(sql)
+        # res=list(res)[0][0]
+        sql = "INSERT INTO ScoreMatrix (name, videoid, score) VALUES ('" + name + "', '" + str(
+            int(i[0])) + "', '" + str(i[1]) + "') ON DUPLICATE KEY UPDATE score = '" + str(i[1]) + "';"
+        print(sql)
+        db.session.execute(sql)
+        db.session.commit()
+    time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    print("end" + time)
+
+
+def getScoreMatrix():
+    # userbaseMatrix = user_based_recommend()
+    # print(userbaseMatrix.shape)
+    print("before")
+    sql="select videoid,score from ScoreMatrix where name='"+session.get("name")+"'"
+    M=list(db.session.execute(sql))
+    print(type(M))
+    M=np.array(M)
+    print("after")
+    # M = sorted(M, key=(lambda x: x[0]), reverse=False)
+    # ScoreMatrix=count()
+    ScoreMatrix = sorted(M, key=(lambda x: x[1]), reverse=True)
+    # print(ScoreMatrix)
     # print(ScoreMatrix)
     return ScoreMatrix
 
@@ -69,7 +106,7 @@ def getScoreMatrix():
 
 # 定义一个全局的data空字典
 global data
-data={}
+data = {}
 # 定义一个全局的w相似度矩阵
 w = []
 
@@ -92,7 +129,7 @@ def data_deal():
         d[i[0]][i[1]] = i[2]
 
     global data
-    data=d
+    data = d
     return d
 
 

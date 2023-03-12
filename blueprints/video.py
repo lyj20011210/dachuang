@@ -1,6 +1,8 @@
+import json
 import re
 from decimal import Decimal
 
+import datetime
 from flask import Blueprint, render_template, session, request, redirect, url_for, flash, jsonify
 from flask_paginate import get_page_parameter, Pagination
 import funtion as fun
@@ -12,6 +14,8 @@ bp = Blueprint("video", __name__, url_prefix="/")
 @bp.route("/", defaults={'page': 1})
 @bp.route("/<page>")
 def index(page):
+    time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    print("start " + time)
     if session.get("name") is None:
         user = session.get("name")
         if user is None:
@@ -20,6 +24,8 @@ def index(page):
         sql = "select * from video_list"
         # 分页语句
         limitpart = " LIMIT {limit} offset {offset} "
+        time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        print("checkpoint5 " + time)
         # 每页记录行数定为9
         limit = 9
         # 获取当前页码
@@ -33,34 +39,64 @@ def index(page):
         sql = sql + limitpart
         sql = sql.format(limit=limit, offset=offset)
         video_list = db.session.execute(sql)
+        time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        print("checkpoint6 " + time)
         # print(video_list)
         # 获取分页代码
         video_list = list(video_list)
         # print(video_list)
         paginate = Pagination(page=page, total=total, per_page=9)
+        time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        print("checkpoint7 " + time)
         return render_template("index.html", user=user, video_list=video_list, paginate=paginate)
     else:
         # w = fun.similarity()
         # print(w)
+        time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        print("checkpoint1 " + time)
         ScoreMatrix = fun.getScoreMatrix()  # 此变量是已经经过余弦相似度得到的评分矩阵，甚至已经排序好了
+        # print(ScoreMatrix)
         video_id_list = []
+        time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        print("checkpoin11 " + time)
         for i in ScoreMatrix:
             video_id_list.append(int(i[0]))  # 把已经排序好的评分矩阵
         videolist = []
-        for i in video_id_list:
-            j = str(i)
-            sql = "select * from video_list where video_id=" + j
-            k = db.session.execute(sql)
-            k = list(k)
-            # print(k)
-            k = k[0]
-            videolist.append(k)
+        time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        print("checkpoint2 " + time)
+        sql="select video_id,video_image,video_name,video_author,video_publishedtime from video_list"
+        list1=db.session.execute(sql)
+        list1=list(list1)
+        print(list1)
+        print(video_id_list)
+        index_dict = {value: index for index, value in enumerate(video_id_list)}
+        videolist = sorted(list1, key=lambda x: index_dict[x[0]])
+        # print(list2)
+        # for i in video_id_list:
+        #     j = str(i)
+        #     sql = "select video_id,video_image,video_name,video_author,video_publishedtime from video_list where video_id=" + j
+        #     time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")
+        #     # print("checkpoint20 " + time)
+        #     k = db.session.execute(sql)
+        #     time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")
+        #     # print("checkpoint21 " + time)
+        #     k = list(k)
+        #     k = k[0]
+        #     # print(k)
+        #     videolist.append(k)
+        # print(videolist == list2)
         n = 0
+        time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        print("checkpoint3 " + time)
         for i in ScoreMatrix:
+            # print(i[1])
             i[1] = Decimal(str(round(i[1], 4))) * 100
-
+        time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        print("checkpoint10 " + time)
         user = session.get("name")
         total = len(videolist)
+        time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        print("checkpoint4 " + time)
         # 每页记录行数定为9
         limit = 9
         # 获取当前页码
@@ -70,6 +106,10 @@ def index(page):
         video_list = videolist[offset:offset + limit:1]
         # 获取分页代码
         paginate = Pagination(page=page, total=total, per_page=9)
+        time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        print("finish " + time)
+        # video_list=list(video_list)
+        # print(json.dumps(video_list))
         return render_template("index.html", user=user, video_list=video_list, paginate=paginate, score=ScoreMatrix)
 
 
@@ -286,6 +326,3 @@ def collects():
     db.session.execute(sql)
     db.session.commit()
     return redirect(url_for('video.detail'), flag=flag)
-
-
-
