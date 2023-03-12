@@ -11,7 +11,7 @@ from exts import db
 # 此函数用于取特定标签的视频
 def selectVideoWithLabel(label: str):
     s = "select * from video_list where video_tag like '" + label + "'"
-    print(s)
+    # print(s)
     video = db.session.execute(s)
     return video
 
@@ -48,7 +48,7 @@ def count():
 
     a = usertag[0]  # a是提取出人物的标签信息
     uscore = a[2:]  # 得到人物标签矩阵
-    print(uscore)
+    # print(uscore)
     n = 0
     d = np.zeros((num, 2))  # d用于储存视频标签以及其对应的分数
 
@@ -65,40 +65,45 @@ def count():
 # 为了优化首页的访问速度，我新建了一个表格，用于存储用户的视频评分矩阵
 def putScoreMatrixintoDatabase():
     time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    print("start " + time)
-    print("1")
+    # print("start " + time)
+    # print("1")
     name = session.get("name")
     ScoreMatrix = count()
-    print("ScoreM")
+    # print("ScoreM")
     ScoreMatrix = sorted(ScoreMatrix, key=(lambda x: x[1]), reverse=True)
-    print(ScoreMatrix)
+    # print(ScoreMatrix)
     for i in ScoreMatrix:
         # sql="select exists (select * from ScoreMatrix where name= '"+name+"' and videoid= "+str(int(i[0]))+")"
         # res=db.session.execute(sql)
         # res=list(res)[0][0]
         sql = "INSERT INTO ScoreMatrix (name, videoid, score) VALUES ('" + name + "', '" + str(
             int(i[0])) + "', '" + str(i[1]) + "') ON DUPLICATE KEY UPDATE score = '" + str(i[1]) + "';"
-        print(sql)
+        # print(sql)
         db.session.execute(sql)
         db.session.commit()
     time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    print("end" + time)
+    # print("end" + time)
 
 
 def getScoreMatrix():
-    # userbaseMatrix = user_based_recommend()
-    # print(userbaseMatrix.shape)
-    print("before")
+    userbaseMatrix = user_based_recommend()
+    # print("userbaseMatrix")
+    # print(userbaseMatrix)
     sql="select videoid,score from ScoreMatrix where name='"+session.get("name")+"'"
     M=list(db.session.execute(sql))
-    print(type(M))
     M=np.array(M)
-    print("after")
-    # M = sorted(M, key=(lambda x: x[0]), reverse=False)
+    # print("M")
+    # print(M)
+    M = sorted(M, key=(lambda x: x[0]), reverse=False)
+    for i in userbaseMatrix:
+        num=int(i[0])
+        # print(num)
+        M[num][1]=M[num][1]+i[1]/100
     # ScoreMatrix=count()
+
     ScoreMatrix = sorted(M, key=(lambda x: x[1]), reverse=True)
-    # print(ScoreMatrix)
-    # print(ScoreMatrix)
+    print("ScoreMatrix:")
+    print(ScoreMatrix)
     return ScoreMatrix
 
 
@@ -219,7 +224,7 @@ def user_based_recommend():
         # 2、利用user数组、not_inter数组、lt列表+w相似矩阵计算目标用户评分矩阵
         m = len(not_inter)
         x = 0
-        predict = np.mat(np.zeros((m, 2)))
+        predict = np.zeros((m, 2))
         for i in not_inter:
             count = 0
             score = 0
@@ -230,8 +235,8 @@ def user_based_recommend():
                     count = count + 1
                     score = score + lt1.get(i) * w[s, lt.index(j)]
             score = score / count
-            predict[x, 0] = i
-            predict[x, 1] = score
+            predict[x][0] = i
+            predict[x][1] = score
             x = x + 1
 
     return predict

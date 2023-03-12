@@ -9,5 +9,5 @@ bp = Blueprint("test", __name__, url_prefix="/test")
 
 @bp.route('/test')
 def i():
-    ScoreMatrix = fun.putScoreMatrixintoDatabase()
+    ScoreMatrix = fun.getScoreMatrix()
     return "hello"
