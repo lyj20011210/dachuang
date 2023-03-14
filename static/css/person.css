@@ -177,6 +177,7 @@ main {
     font-size: 12px;
     color: #8a8a8a;
     float: left;
+    box-sizing: border-box;
 }
 .video_counts{
     font-family: "微软雅黑";
