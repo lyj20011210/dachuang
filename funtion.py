@@ -16,13 +16,14 @@ def selectVideoWithLabel(label: str):
     return video
 
 
-def like(user, video):
+def like(user, video, num):
     # 求余弦相似度算法
     # user = scipy.sparse.csr_matrix(user)
     # video = scipy.sparse.csr_matrix(video)
-    sql = "select count(*) from label"
-    num = db.session.execute(sql)
-    num = int(list(num)[0][0])
+    # sql = "select count(*) from label"
+    # num = db.session.execute(sql)
+    # num = int(list(num)[0][0])
+    # print(num)
     video = list(video)
     flag = 1
     # print(num)
@@ -36,6 +37,8 @@ def like(user, video):
 
 
 def count():
+    time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    print("start count" + time)
     sql = "select * from user_interest where user_name= '" + session.get("name") + "'"
     usertag = db.session.execute(sql)
     usertag = list(usertag)
@@ -51,59 +54,64 @@ def count():
     # print(uscore)
     n = 0
     d = np.zeros((num, 2))  # d用于储存视频标签以及其对应的分数
-
+    time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    print("check1" + time)
+    sql = "select count(*) from label"
+    num1 = db.session.execute(sql)
+    num1 = int(list(num1)[0][0])
+    # print(num1)
     while True:
-        score = like(uscore, videotag[n][2:])  # 将该用户与该视频的评分矩阵算出来
+        score = like(uscore, videotag[n][2:], num1)  # 将该用户与该视频的评分矩阵算出来
         d[n][0] = videotag[n][1]
         d[n][1] = score
         n = n + 1
         if n == num:
             break
+    time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    print("end count" + time)
     return d
 
 
-# 为了优化首页的访问速度，我新建了一个表格，用于存储用户的视频评分矩阵
-def putScoreMatrixintoDatabase():
-    time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    # print("start " + time)
-    # print("1")
-    name = session.get("name")
-    ScoreMatrix = count()
-    # print("ScoreM")
-    ScoreMatrix = sorted(ScoreMatrix, key=(lambda x: x[1]), reverse=True)
-    # print(ScoreMatrix)
-    for i in ScoreMatrix:
-        # sql="select exists (select * from ScoreMatrix where name= '"+name+"' and videoid= "+str(int(i[0]))+")"
-        # res=db.session.execute(sql)
-        # res=list(res)[0][0]
-        sql = "INSERT INTO ScoreMatrix (name, videoid, score) VALUES ('" + name + "', '" + str(
-            int(i[0])) + "', '" + str(i[1]) + "') ON DUPLICATE KEY UPDATE score = '" + str(i[1]) + "';"
-        # print(sql)
-        db.session.execute(sql)
-        db.session.commit()
-    time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    # print("end" + time)
+# 为了优化首页的访问速度，我新建了一个表格，用于存储用户的视频评分矩阵,发现不需要这个表
+# def putScoreMatrixintoDatabase():
+#     time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+#     print("start put" + time)
+#     name = session.get("name")
+#     ScoreMatrix = count()
+#     ScoreMatrix = sorted(ScoreMatrix, key=(lambda x: x[1]), reverse=True)
+#     for i in ScoreMatrix:
+#         sql = "INSERT INTO ScoreMatrix (name, videoid, score) VALUES ('" + name + "', '" + str(
+#             int(i[0])) + "', '" + str(i[1]) + "') ON DUPLICATE KEY UPDATE score = '" + str(i[1]) + "';"
+#         # print(sql)
+#         db.session.execute(sql)
+#         db.session.commit()
+#     time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+#     print("end put" + time)
 
 
 def getScoreMatrix():
     userbaseMatrix = user_based_recommend()
-    # print("userbaseMatrix")
-    # print(userbaseMatrix)
-    sql="select videoid,score from ScoreMatrix where name='"+session.get("name")+"'"
-    M=list(db.session.execute(sql))
-    M=np.array(M)
+    print(userbaseMatrix)
+    sql = "select videoid,score from ScoreMatrix where name='" + session.get("name") + "'"
+    M = count()
+    # M = list(db.session.execute(sql))
+    # M = np.array(M)
     # print("M")
     # print(M)
     M = sorted(M, key=(lambda x: x[0]), reverse=False)
-    for i in userbaseMatrix:
-        num=int(i[0])
-        # print(num)
-        M[num][1]=M[num][1]+i[1]/100
+    if all(x[1] == M[0][1] for x in M):
+        M = [[x[0], 0] for x in M]
+
+    if type(userbaseMatrix) != int:
+        for i in userbaseMatrix:
+            num = int(i[0])
+            # print(num)
+            M[num][1] = M[num][1] + i[1] / 100
     # ScoreMatrix=count()
 
     ScoreMatrix = sorted(M, key=(lambda x: x[1]), reverse=True)
-    print("ScoreMatrix:")
-    print(ScoreMatrix)
+    # print("ScoreMatrix:")
+    # print(ScoreMatrix)
     return ScoreMatrix
 
 

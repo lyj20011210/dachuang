@@ -32,7 +32,7 @@ def mapindex():
             print(cql)
             videolist = funtion.selectVideoWithLabel(mylabel)
             print(videolist)
-            current=mylabel
+            current = mylabel
         # s = "select * from video_list"
         # videolist = list(db.session.execute(s))
         return render_template('Map.html', current=current, videolist=videolist, cql=cql)
@@ -40,8 +40,7 @@ def mapindex():
         return redirect(url_for('login.login'))
 
 
-
-@bp.route("/select",methods=['GET','POST'])
+@bp.route("/select", methods=['GET', 'POST'])
 def select():
     if session.get('name') is not None:
         videolist = []
@@ -69,7 +68,7 @@ def select():
             print(cql)
             videolist = funtion.selectVideoWithLabel(tap)
             print(videolist)
-            current=tap
+            current = tap
         # s = "select * from video_list"
         # videolist = list(db.session.execute(s))
         return render_template('Map.html', current=current, videolist=videolist, cql=cql)
@@ -87,13 +86,19 @@ def select():
 # 用于做标签选择和mapindex的中间跳转，这样就可以在mapindex中判断是否选择标签
 @bp.route("/progress", methods=['GET', 'POST'])
 def progress():
+    name = session.get('name')
+    name = str(name)
     print("progress")
     myLabel = request.form.getlist('ggg')
+    if len(myLabel) == 0:
+        s = "delete from UserMap where userid='" +name+"'"
+        print(s)
+        db.session.execute(s)
+        db.session.commit()
+        return redirect(url_for("map.mapindex"))
     myLabel = str(myLabel[0])
     print(myLabel)
     current = myLabel
-    name = session.get('name')
-    name = str(name)
     user = db.session.execute("select * from UserMap")
     user = list(user)
     flag = 0

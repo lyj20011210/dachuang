@@ -1,3 +1,5 @@
+import datetime
+
 from flask import Blueprint, render_template, redirect, request, jsonify, current_app, session, url_for, g
 
 from Models import Videos_List
@@ -13,7 +15,7 @@ bp = Blueprint("person", __name__, url_prefix="/person")
 @bp.route("/person")
 def person():
     # 读取全部的标签并且输出到页面上
-    if session.get("name") != None:
+    if session.get("name") is not None:
         s = "select * from label"
         sql = db.session.execute(s)
         sql = list(sql)
@@ -24,7 +26,7 @@ def person():
         s = "select * from user_interest where user_name= '" + session.get("name") + "'"
         persontap = db.session.execute(s)
         persontap = list(persontap)
-        print(persontap)
+        # print(persontap)
         showtap = []
         for i in taplist:
             # 对该用户元祖的每个标签列逐一遍历，若发现标签列值为1，则取出该标签名
@@ -46,7 +48,7 @@ def person():
         for i in sql:
             if i[3] == 1:
                 vid.append(i[2])
-        print(vid)
+        # print(vid)
         for i in vid:
             i = str(i)
             s = "select * from video_list where video_id= " + i
@@ -54,7 +56,7 @@ def person():
             sql = list(sql)
             sql = sql[0]
             collects.append(sql)
-        print(collects)
+        # print(collects)
         return render_template("person.html", taplist=taplist, name=session.get("name"), showtap=showtap,
                                collects=collects)
     else:
@@ -78,7 +80,11 @@ def enter():
         s = "update user_interest set " + i + " = 1 where user_name = '" + session.get("name") + "'"
         db.session.execute(s)
     db.session.commit()
-    fun.putScoreMatrixintoDatabase()
+    time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    print("checkpoint1 " + time)
+    # fun.putScoreMatrixintoDatabase()
+    time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    print("checkpoint2 " + time)
     return redirect(url_for('person.person'))
 
 
