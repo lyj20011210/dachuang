@@ -107,3 +107,129 @@
     font-weight:bold;
     font-style:italic;
 }
+
+.card-widget {
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);
+  padding: 10px;
+  margin: 20px;
+  width: 25%;
+  float: left;
+}
+
+.card-widget__title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.card-widget__option {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.card-widget__option input[type="radio"] {
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 10px;
+  appearance: none;
+  -webkit-appearance: none;
+  height: 20px;
+  width: 20px;
+  border: 2px solid #d2d2d2;
+  border-radius: 50%;
+  transition: all 0.3s ease-in-out;
+}
+
+.card-widget__option input[type="radio"]:checked {
+  background-color: #fff;
+  border-color: #42a5f5;
+}
+
+.card-widget__option-label {
+  display: inline-block;
+  vertical-align: middle;
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+}
+
+.btn-css{
+  background-color: #0074D9; /* 背景颜色 */
+  border: none; /* 边框 */
+  color: white; /* 文字颜色 */
+  padding: 15px 32px; /* 内边距 */
+  text-align: center; /* 文字居中 */
+  text-decoration: none; /* 文字装饰 */
+  display: inline-block; /* 块元素 */
+  font-size: 16px; /* 字体大小 */
+  margin: 4px 2px; /* 外边距 */
+  cursor: pointer; /* 鼠标指针 */
+  border-radius: 8px; /* 圆角 */
+}
+.btn-css:hover {
+  background-color: #0A5FD1;
+}
+
+.btn-css:active {
+  background-color: #0052CC;
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
+}
+
+/* 设置复选框样式 */
+.selectag input[type=checkbox] {
+  appearance: none; /* 隐藏默认样式 */
+  -webkit-appearance: none; /* 兼容 Safari 和 Chrome */
+  width: 16px;
+  height: 16px;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
+  display: inline-block;
+  position: relative;
+  margin-right: 8px;
+  cursor: pointer;
+}
+
+/* 设置复选框选中状态下的样式 */
+.selectag input[type=checkbox]:checked::before {
+  content: '\2713';
+  font-size: 14px;
+  color: #fff;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  line-height: 1;
+  text-align: center;
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  background-color: #007bff;
+}
+
+/* 设置标签样式 */
+.selectag label {
+  display: inline-block;
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 8px;
+  cursor: pointer;
+}
+
+/* 设置表单的样式 */
+.selectag form {
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+  color: #333;
+}
+
+.back{
+  background-image: url("../../static/image/person-center.jfif");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center center;
+  background-color: #f0f0f0;
+}

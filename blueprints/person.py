@@ -1,14 +1,10 @@
 import datetime
+from decimal import Decimal
 
 from flask import Blueprint, render_template, redirect, request, jsonify, current_app, session, url_for, g
 
-from Models import Videos_List
 from exts import db
 import funtion as fun
-from exts import mail
-from flask_mail import Message
-
-# url_prefix:作为前缀 127.0.0.1:5000/person
 bp = Blueprint("person", __name__, url_prefix="/person")
 
 
@@ -57,8 +53,23 @@ def person():
             sql = sql[0]
             collects.append(sql)
         # print(collects)
+
+        ScoreMatrix = fun.getScoreMatrix()  # 此变量是已经经过余弦相似度得到的评分矩阵，甚至已经排序好了
+        video_id_list = []
+        for i in ScoreMatrix:
+            video_id_list.append(int(i[0]))  # 把已经排序好的评分矩阵
+
+        sql = "select video_id,video_image,video_name,video_author,video_publishedtime from video_list"
+        list1 = db.session.execute(sql)
+        list1 = list(list1)
+        index_dict = {value: index for index, value in enumerate(video_id_list)}
+        videolist = sorted(list1, key=lambda x: index_dict[x[0]])
+        for i in ScoreMatrix:
+            # print(i[1])
+            i[1] = Decimal(str(round(i[1], 4))) * 100
+
         return render_template("person.html", taplist=taplist, name=session.get("name"), showtap=showtap,
-                               collects=collects)
+                               collects=collects,score=ScoreMatrix)
     else:
         return redirect(url_for('login.login'))
 

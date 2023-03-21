@@ -1,127 +1,138 @@
-{% extends "base.html" %}
-{% block title %}个人中心
+{% block title %}
 {% endblock %}
 
 {% block head %}
-    <link rel="stylesheet" href="../static/css/person.css"/>
-    <script src="../static/JS/person.js"></script>
+    <meta charset="utf-8">
     <meta name="referrer" content="no-referrer"/>
+    <link href="../static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../static/css/resume.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/video.css') }}">
+    <link rel="stylesheet" href="../static/assets/css/style.css">
+    <link rel="stylesheet" href="../static/assets/css/framework.css">
+    <link rel="stylesheet" href="../static/assets/css/icons.css">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
 {% endblock %}
 
 {% block body %}
-    <div style="background: white" id="dowebok">
-        <div style="background: white" class="section sec1" id="section1">
-            <main style="">
-                <div class="main_left">
-                    <div class="myPhoto current">
-                        <a style="border: 1px solid blue; border-radius: 30px">
-{#                            <img src="../static/img/img.jpg" alt="" id="head_pic"/>#}
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary" id="sideNav">
+  <a class="navbar-brand js-scroll-trigger" href="#">
+	<span class="d-block d-lg-none">Start Bootstrap</span>
+	<span class="d-none d-lg-block">
+	  <img class="img-fluid img-profile rounded-circle mx-auto mb-2" src="../static/image/avatar.png" alt="">
+        <p>昵称：{{ name }}</p>
+	</span>
+  </a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+	<span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+	<ul class="navbar-nav">
+	  <li class="nav-item">
+		<a class="nav-link js-scroll-trigger" href="#aboutme">关于我的</a>
+	  </li>
+	  <li class="nav-item">
+		<a class="nav-link js-scroll-trigger" href="#tag">标签选择</a>
+	  </li>
+	  <li class="nav-item">
+		<a class="nav-link js-scroll-trigger" href="#collect">我的收藏</a>
+	  </li>
+	  <li class="nav-item">
+		<a class="nav-link js-scroll-trigger" href="{{ url_for('video.index') }}">返回首页</a>
+	  </li>
+	</ul>
+  </div>
+</nav>
 
-                            <h3 >昵称：{{ name }}</h3>
-{#                            <span style="size: 32px">昵称</span><span style="size: 24px">{{ name }}</span>#}
-                        </a>
-                    </div>
-                    <div onclick="isHidden('div1')">
-                        <a href="#" >
-                            <p></p>
-                            <span>学习兴趣</span>
-                        </a>
-                    </div>
-                    <div onclick="isHidden('div2')">
-                        <a href="#" >
-                            <p></p>
-                            <span>标签选择</span>
-                        </a>
-                    </div>
+
+<div class="container-fluid p-0">
+
+  <section class="resume-section p-3 p-lg-5 d-flex d-column back" id="aboutme">
+	<div class="my-auto" style="padding-left: 10%">
+	  <h1 style="color: #ffffff;font-weight: bold;margin-bottom: 10%">
+        欢迎来到我的个人中心!
+	  </h1>
+	  <p style="color: #ffffff;">蓝色的梦,发生在蓝色的夜里,</p>
+      <p style="color: #ffffff;">在蓝色的闪电下,我驰骋在梦里,躲闪着集结的蓝色光球！
+	</div>
+  </section>
+
+  <section class="resume-section" id="tag">
+      <div class="container my-auto selectag">
+          <div class="row">
+            <div class="col1" style="margin-top: 2.5%">
+              <h2 class="mb-5">请选择感兴趣的标签</h2>
+              <form action="{{ url_for('person.enter') }}" method="post">
+                {% for i in taplist %}
+                <div class="card-widget">
+                  <div>
                     <div>
-                        <a href="#" onclick="isHidden('div3')">
-                            <p></p>
-                            <span>我的收藏</span>
-                        </a>
+                      <label>
+                        <input type="checkbox" id="checkBoxInput"  name="tap" value={{ i }}>
+                          {{ i }}
+                      </label>
                     </div>
+                  </div>
                 </div>
-                <div class="main_right">
-                    <div class="content user_hidden" style="display: block" id="div1">
-                        <div>
-                            <p class="interest_title">我感兴趣的标签</p>
-                            <div style="margin: 0 auto;position: relative">
-                                {% for i in showtap %}
-                                    <label style="width:auto;height:auto;color:#fff;background:orange;line-height: 26px;text-align: center;border-radius: 4px;font-size:30px;margin-left: 10px;cursor: pointer;display: inline-block;margin-top: 20px;padding: 10px;">
-                                        {{ i }}
-                                    </label>
-                                {% endfor %}
-                            </div>
-                        </div>
-                    </div>
-                    <div class="content user_hidden" id="div2">
-                        <form action="{{ url_for('person.enter') }}" method="post">
-                            <div>
-                                {% for i in taplist %}
-                                    <label class="checkboxLabel" >
-                                        {{ i }}
-                                        <input name="tap" value={{ i }} type="checkbox" id="checkBoxInput">
-                                    </label>
+                {% endfor %}
+                <button type="submit" class="btn btn-default btn-css" >提交</button>
+              </form>
+            </div>
+            <div class="col">
+                <h2 class="mb-5" style="margin-top: 2.5%">已选择感兴趣的标签</h2>
+                <div style="margin: 0 auto;position: absolute">
+                    {% for i in showtap %}
+                        <label style="width:auto;height:auto;color:#fff;background:orange;line-height: 26px;text-align: center;border-radius: 4px;font-size:30px;margin-left: 10px;cursor: pointer;display: inline-block;margin-top: 20px;padding: 10px;">
+                            {{ i }}
+                        </label>
+                    {% endfor %}
+                </div>
+            </div>
+          </div>
+    </div>
+  </section>
 
-                                {% endfor %}
-                                <button type="submit" class="btn btn-default">提交</button>
-                            </div>
-                        </form>
-                    </div>
-                    {# 收藏页面，里面的子项参照首页视频展示的格式 #}
-                    <div class="content user_hidden" id="div3" style="overflow-y: auto; overflow-x: hidden !important; " >
-                        <section id="video_list" style="margin-top: 0px">
-                            <div class="video_main_box" style="margin-top: 20px">
-                                {% for video in collects %}
-                                    <div class="video_box" style="margin-left: 5px">
-                                        <a href=" {{ url_for('video.detail',vid=video["video_id"]) }}" style="text-decoration: none">
-                                            <img src="{{ video["video_image"] }}" alt="图片" style="border-radius: 10px"/>
-                                            <div >
-                                                <span class="video_title">{{ video["video_name"] }}</span>
-                                            </div>
-                                            <div>
-                                                <div class="video_up">
-                                                    <img src="/static/image/UP主.png" alt="UP主" style="width: 20px;height: 20px"/>
-                                                    <span>{{ video["video_author"] }}</span>
-                                                </div>
-                                            </div>
-                                        </a>
-                                        <i class="glyphicon glyphicon-option-vertical" style="float: right" title="更多操作"></i>
-                                        <ul>
-                                            <li style="left: 0px; top: 0px; transform-origin: center top; display: none;">取消收藏</li>
-                                        </ul>
+  <section class="video_list resume-section p-3 p-lg-5 d-flex flex-column" id="collect">
+	<div class="my-auto">
+        <h2 class="mb-5">我的收藏</h2>
+        <div class="video_main_box">
+                <div class="video-grid-slider mt-4" uk-slider="finite: true">
+                    {% for video in collects %}
+                        <ul class="video_box">
+                            <li style="list-style: none;">
+                                <a href=" {{ url_for('video.detail',vid=video["video_id"]) }}" style="text-decoration: none"
+                                   class="video-post">
+                                    <div class="video-post-thumbnail">
+                                        {% for j in score %}
+                                            {% if video['video_id']==j[0] %}
+                                                <span class="video-post-count">推荐指数:{{ j[1] }}</span>
+                                            {% endif %}
+                                        {% endfor %}
+                                        <span class="video-post-time">{{ video["video_publishedtime"] }}</span>
+                                        <span class="play-btn-trigger"></span>
+                                        <img src="{{ video["video_image"] }}" alt="图片"/>
                                     </div>
-                                {% endfor %}
-                            </div>
-                        </section>
-                    </div>
-
-                    <div class="content user_hidden" id="div4">
-
-
-                    </div>
-
-                    <div class="content user_hidden" id="div5">
-
-
-                    </div>
-
-                    <div class="content user_hidden" id="div6">
-                        <div>
-                            {#                            <span>视频名称：</span>#}
-                            {#                            <span>视频链接:</span>#}
-                            {#                            <input type="text" class="video_url" value="">#}
-
-                        </div>
-
-                    </div>
-
-                    <div class="content user_hidden">
-
-
-                    </div>
+                                    <div class="video-post-content">
+                                        <h3><span class="video_title">{{ video["video_name"] }}</span></h3>
+                                        <div class="video_up">
+                                            <img src="/static/image/UP主.png" alt="UP主" style="width: 20px;height: 20px"/>
+                                            <span>{{ video["video_author"] }}</span>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                        </ul>
+                    {% endfor %}
                 </div>
-            </main>
         </div>
     </div>
+  </section>
+</div>
+
+
+<script src="../static/vendor/jquery/jquery.min.js"></script>
+<script src="../static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="../static/vendor/jquery-easing/jquery.easing.min.js"></script>
+<script src="../static/JS/resume.min.js"></script>
+
 {% endblock %}
 

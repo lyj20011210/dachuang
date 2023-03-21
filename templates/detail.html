@@ -10,18 +10,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="referrer" content="no-referrer"/>
-    <link rel="icon" href="../static/assets/images/favicon.png">
-
-    <!-- CSS
-    ================================================== -->
     <link rel="stylesheet" href="../static/assets/css/style.css">
-    <link rel="stylesheet" href="../static/assets/css/night-mode.css">
     <link rel="stylesheet" href="../static/assets/css/framework.css">
-    <!-- icons
-    ================================================== -->
+
     <link rel="stylesheet" href="../static/assets/css/icons.css">
-    <!-- Google font
-    ================================================== -->
+
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
 {% endblock %}
 <h>视频详情介绍</h>
@@ -265,45 +258,7 @@
             </div>
         </div>
     {% endfor %}
-    <!-- For Night mode -->
-    <script>
-        (function (window, document, undefined) {
-            'use strict';
-            if (!('localStorage' in window)) return;
-            var nightMode = localStorage.getItem('gmtNightMode');
-            if (nightMode) {
-                document.documentElement.className += ' night-mode';
-            }
-        })(window, document);
 
-
-        (function (window, document, undefined) {
-
-            'use strict';
-
-            // Feature test
-            if (!('localStorage' in window)) return;
-
-            // Get our newly insert toggle
-            var nightMode = document.querySelector('#night-mode');
-            if (!nightMode) return;
-
-            // When clicked, toggle night mode on or off
-            nightMode.addEventListener('click', function (event) {
-                event.preventDefault();
-                document.documentElement.classList.toggle('night-mode');
-                if (document.documentElement.classList.contains('night-mode')) {
-                    localStorage.setItem('gmtNightMode', true);
-                    return;
-                }
-                localStorage.removeItem('gmtNightMode');
-            }, false);
-
-        })(window, document);
-    </script>
-
-    <!-- javaScripts
-                ================================================== -->
     <script src="../static/assets/js/framework.js"></script>
     <script src="../static/assets/js/jquery-3.3.1.min.js"></script>
     <script src="../static/assets/js/simplebar.js"></script>
