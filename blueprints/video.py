@@ -186,13 +186,12 @@ def score():
     for i in flag:
         if i['user'] == username:
             if i['videoid'] == vid:
-                sql = "update giveVideoScore set score=" + score + " where user='" + username + "' and videoid=" + str(
-                    vid)
+                sql = "update giveVideoScore set score=" + score + " where user='" + username + "' and videoid=" + str(vid)
                 print(sql)
                 db.session.execute(sql)
                 db.session.commit()
                 return redirect(url_for('detail'))
-    sql = "insert into giveVideoScore(user, userid,videoid, score) values('" + username + "',"+userid+"," + str(vid) + "," + score + ")"
+    sql = "insert into giveVideoScore(user, userid,videoid, score) values('" + username + "',"+str(userid)+"," + str(vid) + "," + str(score) + ")"
     print(sql)
     db.session.execute(sql)
     db.session.commit()
