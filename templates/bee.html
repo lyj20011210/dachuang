@@ -3,7 +3,7 @@
 
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Home</title>
+    <title>知识地图</title>
     <meta name="keywords" content=""/>
     <meta name="description" content=""/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
@@ -194,7 +194,7 @@
                             </div>
                             <div style="width:90%;margin: auto;overflow: auto">
                                 {% for video in videolist %}
-                                    <div style="width: 40%;float: left;margin: 5%">
+                                    <div style="height: 400px;width: 40%;float: left;margin: 5%">
                                         <div>
                                             <div>
                                                 <a href="{{ url_for('video.detail',vid=video["video_id"]) }}">
