@@ -115,9 +115,9 @@ def detail(vid):
     score = "未评分"
     vid = int(vid)
     for i in scorelist:
-        if i[1] == name:
-            if i[2] == vid:
-                score = i[3]
+        if i['user'] == name:
+            if i['videoid'] == vid:
+                score = i['score']
                 print(score)
                 break
     comment_item = list(db.session.execute("select * from comment_list where video_id=" + str(vid)))
@@ -169,6 +169,11 @@ def detail(vid):
 def score():
     score = request.args.get('name')
     username = session.get("name")
+    sql="select id from user where username='"+str(username)+"'"
+    userid=db.session.execute(sql)
+    userid=list(userid)
+    userid=userid[0][0]
+    print(userid)
     vid = session.get('vid')
     vid = int(vid)
     sql = "select * from giveVideoScore "
@@ -179,16 +184,16 @@ def score():
         return "hello"
     # print(flag)
     for i in flag:
-        if i[1] == username:
-            if i[2] == vid:
+        if i['user'] == username:
+            if i['videoid'] == vid:
                 sql = "update giveVideoScore set score=" + score + " where user='" + username + "' and videoid=" + str(
                     vid)
-                # print(sql)
+                print(sql)
                 db.session.execute(sql)
                 db.session.commit()
-                return "hello"
-    sql = "insert into giveVideoScore(user, videoid, score) values('" + username + "'," + str(vid) + "," + score + ")"
-    # print(sql)
+                return redirect(url_for('detail'))
+    sql = "insert into giveVideoScore(user, userid,videoid, score) values('" + username + "',"+userid+"," + str(vid) + "," + score + ")"
+    print(sql)
     db.session.execute(sql)
     db.session.commit()
     return redirect(url_for('detail'))

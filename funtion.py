@@ -1,11 +1,13 @@
 # 此文件为功能函数
 import datetime
+import torch
 
 import scipy.sparse
 from flask import session
 from scipy import spatial
 import numpy as np
 from exts import db
+from NeuralCF.NCF import NeuralCF
 
 
 # 此函数用于取特定标签的视频
@@ -201,10 +203,59 @@ def user_based_recommend():
             user_id(int):用户的编号
     output: predict(list):推荐列表
     '''
+    name = session.get('name')
+
+    sql = "select * from user where username='" + str(name) + "'"
+    # print(sql)
+    userid = db.session.execute(sql)
+    userid = list(userid)
+    userid = userid[0][0]
+    # print(userid)
+
+    sql = "select videoid from giveVideoScore where userid=" + str(userid)
+    hadvideo = db.session.execute(sql)
+    hadvideo = list(hadvideo)
+    if len(hadvideo)> 0:
+        # newvideo=[[row[0]] for row in video ]
+        # print(hadvideo)
+
+        sql = "select video_id from video_list"
+        allvideo = db.session.execute(sql)
+        allvideo = list(allvideo)
+        # print(allvideo)
+        novideo = [x for x in allvideo if x not in hadvideo]
+        # print(novideo)
+        # 用户id
+        user_id = [userid]
+        # 存储用户没看过的视频id列表
+        movie_for_predict = novideo
+        print(user_id)
+        print(movie_for_predict)
+        # 存储评分结果列表
+        results = []
+        NCF = NeuralCF(6041, 3953)
+        NCF.load_state_dict(torch.load("./NeuralCF/models/save.pt"))
+        for movie_id in movie_for_predict:
+            # 输入为用户id和视频id连接的张量
+            x = torch.tensor([user_id, movie_id])
+            x = x.view(1, 2)
+            # print(x)
+            result = NCF(x).view(-1)
+            results.append(result)
+        results = torch.cat(results, dim=-1)  # 所有movie_for_predict关于用户user的预测值
+        # 取得分前5的movie在results(也在movie_for_predict)中的下标
+        predict_movie_id = results.argsort(descending=True)[:5]  # 从大到小排序，取前5，比如8, 1, 3, 5, 2
+        # 映射到真实的movie id
+        res = []
+        for i in predict_movie_id:
+            res.append(movie_for_predict[i])
+        print('res:', res)
+
     data_deal()
     w = similarity()
     # lt存储所有用户的id
     lt = list(data.keys())
+    print(lt)
     user_id = session.get("name")
     # d存储目标用户的字典数据
     if user_id not in lt:
