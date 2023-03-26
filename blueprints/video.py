@@ -54,6 +54,7 @@ def index(page):
         index_dict = {value: index for index, value in enumerate(video_id_list)}
         videolist = sorted(list1, key=lambda x: index_dict[x[0]])
         for i in ScoreMatrix:
+            # print("i")
             # print(i[1])
             i[1] = Decimal(str(round(i[1], 4))) * 100
 

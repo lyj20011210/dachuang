@@ -1,13 +1,14 @@
 # 此文件为功能函数
 import datetime
-import torch
+from types import NoneType
 
-import scipy.sparse
+import numpy as np
+import torch
 from flask import session
 from scipy import spatial
-import numpy as np
-from exts import db
+
 from NeuralCF.NCF import NeuralCF
+from exts import db
 
 
 # 此函数用于取特定标签的视频
@@ -93,39 +94,39 @@ def count():
 
 def getScoreMatrix():
     userbaseMatrix = user_based_recommend()
-    userbaseMatrix=[[x[0]-1, x[1]] for x in userbaseMatrix]
 
     print("user")
     print(userbaseMatrix)
     NCFMatrix = NCF();
-    NCFMatrix = [x[0] for x in NCFMatrix]
-    print("NCF:")
-    NCFScore=[]
-    baseScore=10
-    flag=0
-    for j in NCFMatrix:
-        NCFScore.append(baseScore - flag * (baseScore / len(NCFMatrix)))
-        flag=flag+1
-    NCFScore = [[x, y] for x, y in zip(NCFMatrix, NCFScore)]
-    print(NCFScore)
-    sql = "select videoid,score from ScoreMatrix where name='" + session.get("name") + "'"
     M = count()
-    # M = list(db.session.execute(sql))
-    # M = np.array(M)
     M = sorted(M, key=(lambda x: x[0]), reverse=False)
+    print("m")
+    print(M)
     if all(x[1] == M[0][1] for x in M):
         M = [[x[0], 0] for x in M]
-    if type(NCFScore) != int:
-        for i in NCFScore:
-            num = int(i[0])
-            # print(num)
-            M[num][1] = M[num][1] + i[1] / 100
-    if type(userbaseMatrix) != int:
-        for i in userbaseMatrix:
-            num = int(i[0])
-            # print(num)
-            M[num][1] = M[num][1] + i[1] / 100
-    # ScoreMatrix=count()
+    if type(NCFMatrix) != NoneType and type(userbaseMatrix != int):
+        userbaseMatrix = [[x[0] - 1, x[1]] for x in userbaseMatrix]
+        NCFMatrix = [x[0] for x in NCFMatrix]
+        print("NCF:")
+        NCFScore = []
+        baseScore = 1
+        flag = 0
+        print(len(NCFMatrix))
+        for j in NCFMatrix:
+            NCFScore.append(baseScore - flag * (baseScore / len(NCFMatrix)))
+            flag = flag + 1
+        NCFScore = [[x, y] for x, y in zip(NCFMatrix, NCFScore)]
+        print(NCFScore)
+        if type(NCFScore) != int:
+            for i in NCFScore:
+                num = int(i[0])
+                # print(num)
+                M[num][1] = M[num][1] + i[1] / 100
+        if type(userbaseMatrix) != int:
+            for i in userbaseMatrix:
+                num = int(i[0])
+                # print(num)
+                M[num][1] = M[num][1] + i[1] / 100
 
     ScoreMatrix = sorted(M, key=(lambda x: x[1]), reverse=True)
     print("ScoreMatrix:")
