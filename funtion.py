@@ -93,17 +93,33 @@ def count():
 
 def getScoreMatrix():
     userbaseMatrix = user_based_recommend()
+    userbaseMatrix=[[x[0]-1, x[1]] for x in userbaseMatrix]
+
+    print("user")
     print(userbaseMatrix)
+    NCFMatrix = NCF();
+    NCFMatrix = [x[0] for x in NCFMatrix]
+    print("NCF:")
+    NCFScore=[]
+    baseScore=10
+    flag=0
+    for j in NCFMatrix:
+        NCFScore.append(baseScore - flag * (baseScore / len(NCFMatrix)))
+        flag=flag+1
+    NCFScore = [[x, y] for x, y in zip(NCFMatrix, NCFScore)]
+    print(NCFScore)
     sql = "select videoid,score from ScoreMatrix where name='" + session.get("name") + "'"
     M = count()
     # M = list(db.session.execute(sql))
     # M = np.array(M)
-    # print("M")
-    # print(M)
     M = sorted(M, key=(lambda x: x[0]), reverse=False)
     if all(x[1] == M[0][1] for x in M):
         M = [[x[0], 0] for x in M]
-
+    if type(NCFScore) != int:
+        for i in NCFScore:
+            num = int(i[0])
+            # print(num)
+            M[num][1] = M[num][1] + i[1] / 100
     if type(userbaseMatrix) != int:
         for i in userbaseMatrix:
             num = int(i[0])
@@ -112,8 +128,8 @@ def getScoreMatrix():
     # ScoreMatrix=count()
 
     ScoreMatrix = sorted(M, key=(lambda x: x[1]), reverse=True)
-    # print("ScoreMatrix:")
-    # print(ScoreMatrix)
+    print("ScoreMatrix:")
+    print(ScoreMatrix)
     return ScoreMatrix
 
 
@@ -196,15 +212,8 @@ def similarity():
     return w
 
 
-def user_based_recommend():
-    '''基于用户相似性为用户user推荐商品
-    input:  data(dic):用户视频打分的字典
-            w(mat):用户之间的相似度矩阵
-            user_id(int):用户的编号
-    output: predict(list):推荐列表
-    '''
+def NCF():
     name = session.get('name')
-
     sql = "select * from user where username='" + str(name) + "'"
     # print(sql)
     userid = db.session.execute(sql)
@@ -215,7 +224,7 @@ def user_based_recommend():
     sql = "select videoid from giveVideoScore where userid=" + str(userid)
     hadvideo = db.session.execute(sql)
     hadvideo = list(hadvideo)
-    if len(hadvideo)> 0:
+    if len(hadvideo) > 0:
         # newvideo=[[row[0]] for row in video ]
         # print(hadvideo)
 
@@ -244,13 +253,22 @@ def user_based_recommend():
             results.append(result)
         results = torch.cat(results, dim=-1)  # 所有movie_for_predict关于用户user的预测值
         # 取得分前5的movie在results(也在movie_for_predict)中的下标
-        predict_movie_id = results.argsort(descending=True)[:5]  # 从大到小排序，取前5，比如8, 1, 3, 5, 2
+        predict_movie_id = results.argsort(descending=True)[:20]  # 从大到小排序，取前5，比如8, 1, 3, 5, 2
         # 映射到真实的movie id
         res = []
         for i in predict_movie_id:
             res.append(movie_for_predict[i])
         print('res:', res)
+        return res
 
+
+def user_based_recommend():
+    '''基于用户相似性为用户user推荐商品
+    input:  data(dic):用户视频打分的字典
+            w(mat):用户之间的相似度矩阵
+            user_id(int):用户的编号
+    output: predict(list):推荐列表
+    '''
     data_deal()
     w = similarity()
     # lt存储所有用户的id
