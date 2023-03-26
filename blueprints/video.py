@@ -123,7 +123,7 @@ def detail(vid):
     comment_item = list(db.session.execute("select * from comment_list where video_id=" + str(vid)))
     comment_child_item = list(db.session.execute("select * from comment_child_list"))
     length = len(comment_item)
-
+#
     # 获取同类型视频
     videotag_str = str((db.session.execute("select video_tag from video_list where video_id=" + str(vid))).all())
     start_index = videotag_str.index("(")
